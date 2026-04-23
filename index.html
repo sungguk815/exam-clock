@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정기시험 | 동국대학교사범대학부속중학교</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #f5f2ea;
+    --bg-card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #8a8a8a;
+    --navy: #1e3a5f;
+    --accent: #a83232;
+    --accent-soft: #fff8f0;
+    --line: #d4cfc0;
+    --line-soft: #e5e1d5;
+    --past-bg: #ece9e0;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* === 화면 테두리 장식: 4개 모서리 코너 마크 === */
+  .corner {
+    position: fixed;
+    width: 42px;
+    height: 42px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .corner::before,
+  .corner::after {
+    content: '';
+    position: absolute;
+    background: var(--navy);
+  }
+  .corner.tl { top: 24px; left: 24px; }
+  .corner.tr { top: 24px; right: 24px; }
+  .corner.bl { bottom: 24px; left: 24px; }
+  .corner.br { bottom: 24px; right: 24px; }
+
+  .corner.tl::before { top: 0; left: 0; width: 100%; height: 2px; }
+  .corner.tl::after  { top: 0; left: 0; width: 2px; height: 100%; }
+  .corner.tr::before { top: 0; right: 0; width: 100%; height: 2px; }
+  .corner.tr::after  { top: 0; right: 0; width: 2px; height: 100%; }
+  .corner.bl::before { bottom: 0; left: 0; width: 100%; height: 2px; }
+  .corner.bl::after  { bottom: 0; left: 0; width: 2px; height: 100%; }
+  .corner.br::before { bottom: 0; right: 0; width: 100%; height: 2px; }
+  .corner.br::after  { bottom: 0; right: 0; width: 2px; height: 100%; }
+
+  /* === 좌측 세로 악센트 바 === */
+  .accent-bar {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 30vh;
+    background: var(--accent);
+    z-index: 4;
+  }
+  .accent-bar.right {
+    left: auto;
+    right: 0;
+  }
+
+  /* === 메인 컨테이너 === */
+  .main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3vh 6vw;
+    position: relative;
+  }
+
+  /* === 1열 : 날짜 === */
+  .row-date {
+    font-weight: 500;
+    font-size: clamp(1.2rem, 2.4vw, 2rem);
+    letter-spacing: 0.2em;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 1.2vh;
+    position: relative;
+  }
+  .row-date::before,
+  .row-date::after {
+    content: '◆';
+    display: inline-block;
+    font-size: 0.5em;
+    color: var(--accent);
+    vertical-align: middle;
+    margin: 0 0.8em;
+    transform: translateY(-0.15em);
+  }
+
+  /* === 2열 : 학교로고 + 학교명 === */
+  .row-school {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 2vw, 28px);
+    margin-bottom: 1.2vh;
+    padding-bottom: 1.2vh;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .row-school::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .row-school img {
+    width: clamp(44px, 5.5vw, 78px);
+    height: auto;
+    display: block;
+  }
+
+  .row-school .school-name {
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    letter-spacing: 0.05em;
+    color: var(--navy);
+  }
+
+  /* === 3열 : 정기시험 === */
+  .row-title {
+    font-weight: 700;
+    font-size: clamp(1.8rem, 3.8vw, 3.2rem);
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    color: var(--navy);
+    text-align: center;
+    margin: 2vh 0 1.5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .row-title .ornament {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .row-title .ornament .line {
+    width: clamp(30px, 4vw, 60px);
+    height: 2px;
+    background: var(--navy);
+  }
+
+  .row-title .ornament .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* === 4열 : 현재시각 + 시계 === */
+  .row-clock-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5vh;
+    padding: 1vh 0;
+    position: relative;
+  }
+
+  .clock-label {
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    color: var(--ink-muted);
+    margin-bottom: 0.3vh;
+    padding: 4px 16px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .row-clock {
+    font-weight: 700;
+    font-size: clamp(8rem, 22vw, 20rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  .row-clock .colon {
+    margin: 0 0.03em;
+    color: var(--accent);
+  }
+
+  /* === 5열 : 교시 박스 === */
+  .row-periods {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(15px, 2vw, 30px);
+    width: 100%;
+    max-width: 1400px;
+  }
+
+  .period {
+    flex: 1;
+    max-width: clamp(220px, 24vw, 340px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    padding: clamp(16px, 2.2vh, 28px) clamp(20px, 3vw, 40px);
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--navy);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.5s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .period .period-name {
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+    letter-spacing: 0.15em;
+    color: var(--navy);
+    transition: all 0.5s ease;
+  }
+
+  .period .period-divider {
+    width: 24px;
+    height: 1px;
+    background: var(--line);
+    transition: all 0.5s ease;
+  }
+
+  .period .period-time {
+    font-weight: 700;
+    font-size: clamp(1.3rem, 2.6vw, 2.2rem);
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    transition: all 0.5s ease;
+  }
+
+  /* 현재 진행 중인 교시 === */
+  .period.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    border-top-color: var(--accent);
+    border-top-width: 6px;
+    box-shadow: 0 6px 20px rgba(168, 50, 50, 0.18);
+    transform: scale(1.08) translateY(-4px);
+  }
+
+  .period.active::before {
+    content: '● 진행중';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 3px 14px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .period.active .period-name {
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    color: var(--accent);
+  }
+
+  .period.active .period-time {
+    font-size: clamp(1.8rem, 3.6vw, 3rem);
+    color: var(--accent);
+  }
+
+  .period.active .period-divider {
+    background: var(--accent);
+    width: 40px;
+  }
+
+  /* 지나간 교시 === */
+  .period.past {
+    background: var(--past-bg);
+    border-color: var(--line-soft);
+    border-top-color: var(--ink-muted);
+    box-shadow: none;
+    opacity: 0.45;
+  }
+
+  .period.past .period-name,
+  .period.past .period-time {
+    color: var(--ink-muted);
+  }
+
+  /* 세로 화면 대응 */
+  @media (max-aspect-ratio: 4/3) {
+    .row-clock {
+      font-size: clamp(7rem, 20vw, 18rem);
+    }
+    .row-periods {
+      gap: clamp(10px, 1.5vw, 20px);
+    }
+  }
+
+  /* 초소형 화면 대응 */
+  @media (max-width: 700px) {
+    .corner { width: 28px; height: 28px; }
+    .corner.tl { top: 14px; left: 14px; }
+    .corner.tr { top: 14px; right: 14px; }
+    .corner.bl { bottom: 14px; left: 14px; }
+    .corner.br { bottom: 14px; right: 14px; }
+    .accent-bar { height: 20vh; width: 4px; }
+    .row-school {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .row-title {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .row-title .ornament {
+      transform: rotate(0deg);
+    }
+    .row-periods {
+      flex-direction: column;
+      gap: 1vh;
+    }
+    .period {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 4개 모서리 코너 마크 -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <!-- 좌/우 세로 악센트 바 -->
+  <div class="accent-bar"></div>
+  <div class="accent-bar right"></div>
+
+  <div class="main">
+
+    <!-- 1열: 날짜 -->
+    <div class="row-date" id="date">&nbsp;</div>
+
+    <!-- 2열: 학교로고 + 학교명 -->
+    <div class="row-school">
+      <img src="school-logo.png" alt="학교 로고">
+      <div class="school-name">동국대학교사범대학부속중학교</div>
+    </div>
+
+    <!-- 3열: 정기시험 (장식 포함) -->
+    <div class="row-title">
+      <span class="ornament"><span class="line"></span><span class="dot"></span></span>
+      <span>정기시험</span>
+      <span class="ornament"><span class="dot"></span><span class="line"></span></span>
+    </div>
+
+    <!-- 4열: 현재시각 + 시계 -->
+    <div class="row-clock-wrap">
+      <div class="clock-label">현재시각</div>
+      <div class="row-clock" aria-live="off">
+        <span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span>
+      </div>
+    </div>
+
+    <!-- 5열: 교시별 시간표 (박스) -->
+    <div class="row-periods" id="periods">
+      <div class="period" data-start="540" data-end="585">
+        <div class="period-name">1교시</div>
+        <div class="period-divider"></div>
+        <div class="period-time">09:00 &ndash; 09:45</div>
+      </div>
+      <div class="period" data-start="600" data-end="645">
+        <div class="period-name">2교시</div>
+        <div class="period-divider"></div>
+        <div class="period-time">10:00 &ndash; 10:45</div>
+      </div>
+      <div class="period" data-start="660" data-end="705">
+        <div class="period-name">3교시</div>
+        <div class="period-divider"></div>
+        <div class="period-time">11:00 &ndash; 11:45</div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  // ============================================================
+  // 교시 시간 정의 (data-attribute, 분 단위)
+  //   - 1교시: 540분(09:00) ~ 585분(09:45)
+  //   - 2교시: 600분(10:00) ~ 645분(10:45)
+  //   - 3교시: 660분(11:00) ~ 705분(11:45)
+  // ============================================================
+
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const dateEl = document.getElementById('date');
+  const periodEls = document.querySelectorAll('.period');
+
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+
+  function pad(n) {
+    return n < 10 ? '0' + n : '' + n;
+  }
+
+  function updatePeriodStates(now) {
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    periodEls.forEach(el => {
+      const start = parseInt(el.dataset.start, 10);
+      const end = parseInt(el.dataset.end, 10);
+
+      el.classList.remove('active', 'past');
+
+      if (currentMinutes >= start && currentMinutes < end) {
+        el.classList.add('active');
+      } else if (currentMinutes >= end) {
+        el.classList.add('past');
+      }
+    });
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const h = pad(now.getHours());
+    const m = pad(now.getMinutes());
+
+    if (hoursEl.textContent !== h) hoursEl.textContent = h;
+    if (minutesEl.textContent !== m) minutesEl.textContent = m;
+
+    const y = now.getFullYear();
+    const mo = now.getMonth() + 1;
+    const d = now.getDate();
+    const w = weekdays[now.getDay()];
+    const dateStr = `${y}년 ${mo}월 ${d}일 ${w}요일`;
+    if (dateEl.textContent !== dateStr) dateEl.textContent = dateStr;
+
+    updatePeriodStates(now);
+  }
+
+  updateClock();
+
+  const now = new Date();
+  const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+
+  setTimeout(() => {
+    updateClock();
+    setInterval(updateClock, 60000);
+  }, msUntilNextMinute);
+
+  if ('wakeLock' in navigator) {
+    navigator.wakeLock.request('screen').catch(() => {});
+  }
+</script>
+
+</body>
+</html>
