@@ -142,6 +142,7 @@
     margin-bottom: clamp(14px, 1.8vh, 28px);
     border-bottom: 2px solid var(--panel-line);
     flex-shrink: 0;
+    display: none;
   }
 
   /* === 타임라인 래퍼 (SVG 포함) === */
@@ -164,7 +165,7 @@
     overflow-x: visible;
     position: relative;
     z-index: 2;
-    padding-left: clamp(40px, 2.5vw, 56px);
+    padding-left: clamp(12px, 1.2vw, 20px);
     padding-right: clamp(12px, 1.5vw, 24px);
   }
 
@@ -197,6 +198,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: clamp(8px, 1vw, 16px);
+    margin-right: clamp(8px, 1vw, 16px);
   }
 
   /* 타임라인 아이템 점 (연표 스타일) - SVG 선의 중심을 통과 */
@@ -568,7 +571,7 @@
     <div class="dashboard">
 
       <div class="left-panel">
-        <div class="panel-label">시험진행</div>
+        <div class="panel-label">시 험 일 정</div>
         
         <div class="timeline-wrapper">
           <!-- 타임라인 아이템 -->
