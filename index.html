@@ -6,10 +6,10 @@
 <title>정기시험 | 동국대학교사범대학부속중학교</title>
 <style>
   /* ============================================================
-     4K UHD (3840×2160) 전자칠판 기준 설계
-     - 뷰포트 vw 기반 반응형 + 일반 PC 모니터 최소값 보장
-     - 타임라인·우측 패널 모두 교실 뒤에서도 읽힐 수 있게 확대
-     - 현재 활동은 배경 블록 + 좌측 굵은 바 + 확대 + 컬러 텍스트
+     4K UHD (3840×2160) 전자칠판 최적화 - 연표 스타일 타임라인
+     - 선이 끝까지 내려옴 (SVG 기반)
+     - 원의 중앙을 정확히 선이 지남
+     - 고정 높이 + 절대 위치 정확 계산
      ============================================================ */
   * {
     margin: 0;
@@ -20,28 +20,22 @@
   :root {
     --bg: #f5f2ea;
     --bg-card: #ffffff;
-    --ink: #1a1a1a;
-    --ink-soft: #3a3a3a;
+    --ink: #000000;
+    --ink-soft: #2a2a2a;
     --ink-muted: #6a6a6a;
     --navy: #1e3a5f;
-    --navy-deep: #0e1e30;
     --accent: #a83232;
     --accent-soft: #fff4e8;
-    --accent-hl: #ffe8cf;
-    --prep: #1e3a5f;
-    --prep-soft: #e8eff7;
     --rest: #3f6b26;
     --rest-soft: #eef3e5;
     --move: #8a5a2b;
     --move-soft: #f5ecdf;
+    --prep: #1e3a5f;
+    --prep-soft: #e8eff7;
     --line: #d4cfc0;
-    --line-soft: #e5e1d5;
-    --past-bg: #ece9e0;
-    /* 파스텔 연두 계열 (좌측 패널 전용) */
     --panel-bg: #e4efd4;
-    --panel-bg-deep: #d0e0b5;
-    --panel-line: #a8c080;
-    --panel-line-soft: #c5d89e;
+    --panel-line: #8fb378;
+    --timeline-line: #a8c080;
   }
 
   html, body {
@@ -113,7 +107,7 @@
   .dashboard {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(320px, 30%) 1fr;
+    grid-template-columns: minmax(320px, 32%) 1fr;
     gap: clamp(18px, 1.8vw, 48px);
     min-height: 0;
     max-width: 3400px;
@@ -122,47 +116,63 @@
   }
 
   /* ============================================================
-     좌측 패널 : 시험 일정 타임라인 (파스텔 연두 배경)
+     좌측 패널 : 연표 스타일 타임라인
      ============================================================ */
   .left-panel {
     background: var(--panel-bg);
     border: 1px solid var(--panel-line);
     border-top: clamp(6px, 0.5vw, 12px) solid var(--rest);
     border-radius: 6px;
-    padding: clamp(22px, 2vh, 48px) clamp(24px, 2vw, 56px);
+    padding: clamp(22px, 2vh, 48px) clamp(20px, 1.8vw, 40px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     min-height: 0;
+    position: relative;
   }
 
   .panel-label {
     font-weight: 700;
-    font-size: clamp(1.4rem, 1.6vw, 2.8rem);
+    font-size: clamp(1.6rem, 1.8vw, 3.2rem);
     letter-spacing: 0.25em;
     text-indent: 0.25em;
     color: var(--rest);
     text-align: center;
     padding-bottom: clamp(10px, 1.2vh, 24px);
-    margin-bottom: clamp(14px, 1.8vh, 36px);
+    margin-bottom: clamp(14px, 1.8vh, 28px);
     border-bottom: 2px solid var(--panel-line);
     flex-shrink: 0;
   }
 
-  .timeline {
-    position: relative;
-    padding: clamp(6px, 0.8vh, 16px) 0 clamp(6px, 0.8vh, 16px) clamp(32px, 2.2vw, 60px);
-    overflow-y: auto;
+  /* === 타임라인 래퍼 (SVG 포함) === */
+  .timeline-wrapper {
     flex: 1;
     min-height: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* 스크롤바 (파스텔 테마) */
+  /* === 타임라인 컨테이너 === */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.6vh, 24px);
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: visible;
+    position: relative;
+    z-index: 2;
+    padding-left: clamp(40px, 2.5vw, 56px);
+  }
+
+  /* 타임라인 스크롤바 */
   .timeline::-webkit-scrollbar {
     width: clamp(8px, 0.6vw, 14px);
   }
   .timeline::-webkit-scrollbar-track {
-    background: var(--panel-bg-deep);
+    background: var(--panel-bg);
     border-radius: 4px;
   }
   .timeline::-webkit-scrollbar-thumb {
@@ -173,132 +183,153 @@
     background: var(--rest);
   }
 
-  /* 세로 기준선 */
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: clamp(10px, 0.7vw, 18px);
-    top: clamp(6px, 0.8vh, 16px);
-    bottom: clamp(6px, 0.8vh, 16px);
-    width: clamp(3px, 0.2vw, 5px);
-    background: var(--panel-line);
-  }
-
+  /* === 타임라인 아이템 (각 일정 박스) === */
   .tl-item {
-    position: relative;
-    padding: clamp(10px, 1.2vh, 22px) clamp(12px, 1vw, 24px);
-    margin-bottom: clamp(6px, 0.7vh, 14px);
+    background: var(--bg-card);
+    border: clamp(2px, 0.15vw, 3px) solid var(--panel-line);
     border-radius: 6px;
+    padding: clamp(12px, 1.2vh, 20px) clamp(14px, 1.2vw, 24px);
+    position: relative;
     transition: all 0.5s ease;
+    flex-shrink: 0;
+    min-height: clamp(70px, 7vh, 100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .tl-item:last-child {
-    margin-bottom: 0;
-  }
-
-  /* 점 표시 */
+  /* 타임라인 아이템 점 (연표 스타일) - SVG 선의 중심을 통과 */
   .tl-item::before {
     content: '';
     position: absolute;
-    left: clamp(-38px, -2.4vw, -58px);
+    left: clamp(-12px, -1vw, -20px);
     top: 50%;
     transform: translateY(-50%);
-    width: clamp(18px, 1.2vw, 30px);
-    height: clamp(18px, 1.2vw, 30px);
-    background: var(--panel-bg);
-    border: clamp(3px, 0.25vw, 6px) solid var(--ink-muted);
+    width: clamp(16px, 1.1vw, 26px);
+    height: clamp(16px, 1.1vw, 26px);
+    background: var(--bg-card);
+    border: clamp(3px, 0.25vw, 5px) solid var(--panel-line);
     border-radius: 50%;
+    z-index: 3;
     transition: all 0.5s ease;
-    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 활동 유형별 박스 테두리 색상 - 원 내부 채우기 */
+  .tl-item.prep {
+    border-color: var(--prep);
+  }
+  .tl-item.prep::before {
+    border-color: var(--prep);
+    background: var(--prep);
+  }
+
+  .tl-item.exam {
+    border-color: var(--accent);
+  }
+  .tl-item.exam::before {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .tl-item.rest {
+    border-color: var(--rest);
+  }
+  .tl-item.rest::before {
+    border-color: var(--rest);
+    background: var(--rest);
+  }
+
+  .tl-item.move {
+    border-color: var(--move);
+  }
+  .tl-item.move::before {
+    border-color: var(--move);
+    background: var(--move);
+  }
+
+  /* 타임라인 텍스트 */
+  .tl-text {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 0.6vh, 10px);
   }
 
   .tl-time {
     font-weight: 700;
-    font-size: clamp(1.5rem, 1.7vw, 2.8rem);
+    font-size: clamp(1.8rem, 1.9vw, 3.4rem);
     color: var(--ink);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
-    transition: all 0.5s ease;
   }
 
   .tl-label {
     font-weight: 600;
-    font-size: clamp(1.3rem, 1.5vw, 2.4rem);
+    font-size: clamp(1.6rem, 1.7vw, 3.0rem);
     color: var(--ink-soft);
-    margin-top: clamp(4px, 0.4vh, 10px);
     letter-spacing: 0.03em;
-    transition: all 0.5s ease;
   }
-
-  /* 활동 유형별 점 색상 */
-  .tl-item.prep::before { border-color: var(--prep); }
-  .tl-item.exam::before { border-color: var(--accent); }
-  .tl-item.rest::before { border-color: var(--rest); }
-  .tl-item.move::before { border-color: var(--move); }
 
   /* === 현재 활동 하이라이트 === */
   .tl-item.current {
-    background: var(--accent);
-    padding-left: clamp(16px, 1.4vw, 32px);
-    border-left: clamp(6px, 0.5vw, 12px) solid #ffffff;
-    box-shadow: 0 4px 14px rgba(168, 50, 50, 0.35);
-    transform: scale(1.04);
+    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-card) 100%);
+    border-width: clamp(3px, 0.3vw, 5px);
+    box-shadow: 0 6px 20px rgba(168, 50, 50, 0.25);
+    transform: scale(1.03);
     transform-origin: left center;
   }
 
   .tl-item.current::before {
-    width: clamp(24px, 1.6vw, 40px);
-    height: clamp(24px, 1.6vw, 40px);
-    background: #ffffff;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 clamp(5px, 0.4vw, 10px) rgba(168, 50, 50, 0.2);
+    width: clamp(20px, 1.3vw, 32px);
+    height: clamp(20px, 1.3vw, 32px);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 clamp(4px, 0.3vw, 7px) rgba(168, 50, 50, 0.2);
   }
 
-  .tl-item.current .tl-time {
-    color: #ffffff;
-    font-size: clamp(1.65rem, 1.9vw, 3.1rem);
-    font-weight: 700;
-  }
-
-  .tl-item.current .tl-label {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: clamp(1.45rem, 1.7vw, 2.7rem);
-  }
-
-  /* 쉬는 시간이 현재 */
+  /* 활동 유형별 현재 하이라이트 */
   .tl-item.current.rest {
-    background: var(--rest);
-    box-shadow: 0 4px 14px rgba(63, 107, 38, 0.35);
+    background: linear-gradient(135deg, var(--rest-soft) 0%, var(--bg-card) 100%);
+    border-color: var(--rest);
+    box-shadow: 0 6px 20px rgba(63, 107, 38, 0.25);
   }
   .tl-item.current.rest::before {
-    border-color: var(--rest);
-    box-shadow: 0 0 0 clamp(5px, 0.4vw, 10px) rgba(63, 107, 38, 0.2);
+    background: var(--rest);
+    border-color: #ffffff;
   }
 
-  /* 시험 준비가 현재 */
   .tl-item.current.prep {
-    background: var(--prep);
-    box-shadow: 0 4px 14px rgba(30, 58, 95, 0.35);
+    background: linear-gradient(135deg, var(--prep-soft) 0%, var(--bg-card) 100%);
+    border-color: var(--prep);
+    box-shadow: 0 6px 20px rgba(30, 58, 95, 0.25);
   }
   .tl-item.current.prep::before {
-    border-color: var(--prep);
-    box-shadow: 0 0 0 clamp(5px, 0.4vw, 10px) rgba(30, 58, 95, 0.2);
+    background: var(--prep);
+    border-color: #ffffff;
   }
 
-  /* 이동이 현재 */
   .tl-item.current.move {
-    background: var(--move);
-    box-shadow: 0 4px 14px rgba(138, 90, 43, 0.35);
+    background: linear-gradient(135deg, var(--move-soft) 0%, var(--bg-card) 100%);
+    border-color: var(--move);
+    box-shadow: 0 6px 20px rgba(138, 90, 43, 0.25);
   }
   .tl-item.current.move::before {
-    border-color: var(--move);
-    box-shadow: 0 0 0 clamp(5px, 0.4vw, 10px) rgba(138, 90, 43, 0.2);
+    background: var(--move);
+    border-color: #ffffff;
+  }
+
+  .tl-item.current.exam {
+    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-card) 100%);
+    border-color: var(--accent);
+    box-shadow: 0 6px 20px rgba(168, 50, 50, 0.25);
+  }
+  .tl-item.current.exam::before {
+    background: var(--accent);
+    border-color: #ffffff;
   }
 
   /* 지나간 활동 */
   .tl-item.past {
-    opacity: 0.4;
+    opacity: 0.5;
   }
 
   /* ============================================================
@@ -310,7 +341,7 @@
     border-top: clamp(6px, 0.5vw, 12px) solid var(--accent);
     border-radius: 6px;
     padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -318,7 +349,6 @@
     overflow: hidden;
   }
 
-  /* 우측 상단 헤더 */
   .right-header {
     display: flex;
     align-items: center;
@@ -358,7 +388,6 @@
     white-space: nowrap;
   }
 
-  /* 메인 디스플레이 */
   .main-display {
     display: flex;
     flex-direction: column;
@@ -369,7 +398,6 @@
     flex: 1;
   }
 
-  /* 현재시각 박스 */
   .clock-box {
     display: flex;
     flex-direction: column;
@@ -398,7 +426,7 @@
 
   .clock {
     font-weight: 700;
-    font-size: clamp(7rem, 14vw, 24rem);
+    font-size: clamp(8rem, 16vw, 26rem);
     line-height: 0.9;
     letter-spacing: -0.03em;
     color: var(--ink);
@@ -411,7 +439,6 @@
     color: var(--accent);
   }
 
-  /* 현재 상태 강조 박스 */
   .status-card {
     width: 100%;
     max-width: clamp(720px, 60vw, 1600px);
@@ -466,7 +493,7 @@
 
   .status-title {
     font-weight: 700;
-    font-size: clamp(2.5rem, 3.5vw, 6rem);
+    font-size: clamp(3rem, 3.8vw, 7rem);
     letter-spacing: 0.04em;
     color: var(--navy);
     text-align: center;
@@ -480,7 +507,7 @@
 
   .status-time {
     font-weight: 700;
-    font-size: clamp(1.5rem, 1.8vw, 3rem);
+    font-size: clamp(1.8vw, 2vw, 3rem);
     color: var(--ink);
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
@@ -493,7 +520,6 @@
     text-align: center;
   }
 
-  /* 반응형 : 세로 화면 또는 좁은 화면 */
   @media (max-aspect-ratio: 4/3) {
     .clock {
       font-size: clamp(6rem, 12vw, 18rem);
@@ -516,19 +542,16 @@
       grid-template-columns: 1fr;
       gap: 2vh;
     }
-    .timeline { max-height: 30vh; }
   }
 </style>
 </head>
 <body>
 
-  <!-- 4개 모서리 -->
   <div class="corner tl"></div>
   <div class="corner tr"></div>
   <div class="corner bl"></div>
   <div class="corner br"></div>
 
-  <!-- 좌우 악센트 바 -->
   <div class="accent-bar left"></div>
   <div class="accent-bar right"></div>
 
@@ -536,15 +559,17 @@
 
     <div class="dashboard">
 
-      <!-- 좌측 패널: 타임라인 -->
       <div class="left-panel">
         <div class="panel-label">시 험 일 정</div>
-        <div class="timeline" id="timeline">
-          <!-- JS로 동적 생성 -->
+        
+        <div class="timeline-wrapper">
+          <!-- 타임라인 아이템 -->
+          <div class="timeline" id="timeline">
+            <!-- JS로 동적 생성 -->
+          </div>
         </div>
       </div>
 
-      <!-- 우측 패널: 시험 정보 -->
       <div class="right-panel">
 
         <div class="right-header">
@@ -580,10 +605,6 @@
   </div>
 
 <script>
-  // ============================================================
-  // 시간표 정의 (분 단위)
-  // type: move(이동) / prep(시험 준비) / exam(시험) / rest(쉬는 시간)
-  // ============================================================
   const schedule = [
     { start: 525, end: 535, type: 'move', label: '이동반 시험실로 이동', sub: '지정된 시험실로 이동' },
     { start: 535, end: 540, type: 'prep', label: '1교시 시험 준비', sub: '문제지·답안지 수령' },
@@ -596,7 +617,6 @@
     { start: 660, end: 705, type: 'exam', label: '3교시 시험',     sub: '' }
   ];
 
-  // === DOM 요소 ===
   const hoursEl = document.getElementById('hours');
   const minutesEl = document.getElementById('minutes');
   const dateEl = document.getElementById('date');
@@ -617,22 +637,32 @@
     return pad(h) + ':' + pad(m);
   }
 
-  // === 타임라인 빌드 ===
   function buildTimeline() {
     timelineEl.innerHTML = '';
     schedule.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = `tl-item ${item.type}`;
       div.dataset.idx = idx;
-      div.innerHTML = `
-        <div class="tl-time">${formatTime(item.start)} ~ ${formatTime(item.end)}</div>
-        <div class="tl-label">${item.label}</div>
-      `;
+      
+      const textDiv = document.createElement('div');
+      textDiv.className = 'tl-text';
+      
+      const timeSpan = document.createElement('div');
+      timeSpan.className = 'tl-time';
+      timeSpan.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
+      
+      const labelSpan = document.createElement('div');
+      labelSpan.className = 'tl-label';
+      labelSpan.textContent = item.label;
+      
+      textDiv.appendChild(timeSpan);
+      textDiv.appendChild(labelSpan);
+      div.appendChild(textDiv);
+      
       timelineEl.appendChild(div);
     });
   }
 
-  // === 상태 판정 및 UI 업데이트 ===
   function updateStatus(now) {
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -644,7 +674,6 @@
       }
     }
 
-    // 타임라인 상태 업데이트
     const items = timelineEl.querySelectorAll('.tl-item');
     items.forEach((el, i) => {
       el.classList.remove('current', 'past');
@@ -655,7 +684,6 @@
       }
     });
 
-    // 상태 카드 업데이트
     statusCard.classList.remove('exam', 'rest', 'move', 'prep', 'ended');
 
     const firstStart = schedule[0].start;
