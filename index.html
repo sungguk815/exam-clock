@@ -5,584 +5,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>정기시험 | 동국대학교사범대학부속중학교</title>
 <style>
-  /* ============================================================
-     4K UHD (3840×2160) 전자칠판 최적화 - 연표 스타일 타임라인
-     - 선이 끝까지 내려옴 (SVG 기반)
-     - 원의 중앙을 정확히 선이 지남
-     - 고정 높이 + 절대 위치 정확 계산
-     ============================================================ */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #f5f2ea;
-    --bg-card: #ffffff;
-    --ink: #000000;
-    --ink-soft: #2a2a2a;
-    --ink-muted: #6a6a6a;
-    --navy: #1e3a5f;
-    --accent: #a83232;
-    --accent-soft: #fff4e8;
-    --rest: #3f6b26;
-    --rest-soft: #eef3e5;
-    --move: #8a5a2b;
-    --move-soft: #f5ecdf;
-    --prep: #1e3a5f;
-    --prep-soft: #e8eff7;
-    --line: #d4cfc0;
-    --panel-bg: #e4efd4;
+    --bg: #f5f2ea; --bg-card: #ffffff; --ink: #000000;
+    --ink-soft: #2a2a2a; --ink-muted: #6a6a6a; --navy: #1e3a5f;
+    --accent: #a83232; --accent-soft: #fff4e8;
+    --rest: #3f6b26; --rest-soft: #eef3e5;
+    --move: #8a5a2b; --move-soft: #f5ecdf;
+    --prep: #1e3a5f; --prep-soft: #e8eff7;
+    --line: #d4cfc0; --panel-bg: #e4efd4;
     --panel-line: #8fb378;
-    --timeline-line: #a8c080;
   }
 
-  html, body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
+  /* 상태별 통합 테마 변수 */
+  .exam { --theme-color: var(--accent); --theme-soft: var(--accent-soft); --theme-shadow: rgba(168, 50, 50, 0.25); }
+  .rest { --theme-color: var(--rest); --theme-soft: var(--rest-soft); --theme-shadow: rgba(63, 107, 38, 0.25); }
+  .move { --theme-color: var(--move); --theme-soft: var(--move-soft); --theme-shadow: rgba(138, 90, 43, 0.25); }
+  .prep { --theme-color: var(--prep); --theme-soft: var(--prep-soft); --theme-shadow: rgba(30, 58, 95, 0.25); }
 
+  html, body { height: 100%; width: 100%; overflow: hidden; }
   body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
-    position: relative;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background: var(--bg); color: var(--ink);
+    font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+    position: relative; -webkit-font-smoothing: antialiased;
   }
 
-  /* === 4개 모서리 코너 마크 === */
-  .corner {
-    position: fixed;
-    width: clamp(42px, 2.5vw, 90px);
-    height: clamp(42px, 2.5vw, 90px);
-    pointer-events: none;
-    z-index: 5;
-  }
-  .corner::before,
-  .corner::after {
-    content: '';
-    position: absolute;
-    background: var(--navy);
-  }
+  /* 4개 모서리 코너 마크 */
+  .corner { position: fixed; width: clamp(42px, 2.5vw, 90px); height: clamp(42px, 2.5vw, 90px); pointer-events: none; z-index: 5; }
+  .corner::before, .corner::after { content: ''; position: absolute; background: var(--navy); }
   .corner.tl { top: clamp(18px, 1.2vw, 36px); left: clamp(18px, 1.2vw, 36px); }
-  .corner.tr { top: clamp(18px, 1.2vw, 36px); right: clamp(18px, 1.2vw, 36px); }
-  .corner.bl { bottom: clamp(18px, 1.2vw, 36px); left: clamp(18px, 1.2vw, 36px); }
-  .corner.br { bottom: clamp(18px, 1.2vw, 36px); right: clamp(18px, 1.2vw, 36px); }
-  .corner.tl::before { top: 0; left: 0; width: 100%; height: 3px; }
-  .corner.tl::after  { top: 0; left: 0; width: 3px; height: 100%; }
-  .corner.tr::before { top: 0; right: 0; width: 100%; height: 3px; }
-  .corner.tr::after  { top: 0; right: 0; width: 3px; height: 100%; }
-  .corner.bl::before { bottom: 0; left: 0; width: 100%; height: 3px; }
-  .corner.bl::after  { bottom: 0; left: 0; width: 3px; height: 100%; }
-  .corner.br::before { bottom: 0; right: 0; width: 100%; height: 3px; }
-  .corner.br::after  { bottom: 0; right: 0; width: 3px; height: 100%; }
+  .corner.tr { top: clamp(18px, 1.2vw, 36px); right: clamp(18px, 1.2vw, 36px); transform: scaleX(-1); }
+  .corner.bl { bottom: clamp(18px, 1.2vw, 36px); left: clamp(18px, 1.2vw, 36px); transform: scaleY(-1); }
+  .corner.br { bottom: clamp(18px, 1.2vw, 36px); right: clamp(18px, 1.2vw, 36px); transform: scale(-1, -1); }
+  .corner::before { top: 0; left: 0; width: 100%; height: 3px; }
+  .corner::after  { top: 0; left: 0; width: 3px; height: 100%; }
 
-  /* === 좌우 세로 악센트 바 === */
-  .accent-bar {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: clamp(6px, 0.4vw, 12px);
-    height: 30vh;
-    background: var(--accent);
-    z-index: 4;
+  .accent-bar { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(6px, 0.4vw, 12px); height: 30vh; background: var(--accent); z-index: 4; }
+  .accent-bar.left { left: 0; } .accent-bar.right { right: 0; }
+
+  .main { height: 100%; display: flex; flex-direction: column; padding: clamp(20px, 3vh, 60px) clamp(40px, 4vw, 120px); }
+  .dashboard { flex: 1; display: grid; grid-template-columns: minmax(320px, 32%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
+
+  /* 좌측 패널 */
+  .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(20px, 1.8vw, 40px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
+  .timeline-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .timeline { display: flex; flex-direction: column; gap: clamp(16px, 2vh, 28px); flex: 1; overflow-y: auto; padding: 0 clamp(12px, 1.5vw, 24px) 0 clamp(12px, 1.2vw, 20px); }
+  
+  .timeline::-webkit-scrollbar { width: clamp(8px, 0.6vw, 14px); }
+  .timeline::-webkit-scrollbar-track { background: var(--panel-bg); border-radius: 4px; }
+  .timeline::-webkit-scrollbar-thumb { background: var(--panel-line); border-radius: 4px; }
+
+  /* 타임라인 아이템 (테마 변수 적용 및 여백 확대) */
+  .tl-item { 
+    background: var(--bg-card); 
+    border: clamp(2px, 0.15vw, 3px) solid var(--theme-color, var(--panel-line)); 
+    border-radius: 6px; 
+    /* 박스선과 내용 사이의 상하좌우 여백을 눈에 띄게 늘렸습니다 */
+    padding: clamp(16px, 2vh, 26px) clamp(24px, 2.5vw, 40px); 
+    position: relative; transition: all 0.5s ease; 
+    /* 여백이 커진 만큼 기본 높이도 키웠습니다 */
+    min-height: clamp(74px, 7vh, 100px); 
+    display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(8px, 1vw, 16px); 
   }
-  .accent-bar.left { left: 0; }
-  .accent-bar.right { right: 0; }
-
-  /* === 메인 컨테이너 === */
-  .main {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: clamp(20px, 3vh, 60px) clamp(40px, 4vw, 120px);
-    position: relative;
-  }
-
-  /* === 대시보드 2단 그리드 === */
-  .dashboard {
-    flex: 1;
-    display: grid;
-    grid-template-columns: minmax(320px, 32%) 1fr;
-    gap: clamp(18px, 1.8vw, 48px);
-    min-height: 0;
-    max-width: 3400px;
-    width: 100%;
-    margin: 0 auto;
+  .tl-item::before { 
+    content: ''; position: absolute; left: clamp(-12px, -1vw, -20px); top: 50%; transform: translateY(-50%); 
+    width: clamp(16px, 1.1vw, 26px); height: clamp(16px, 1.1vw, 26px); 
+    background: var(--theme-color, var(--bg-card)); 
+    border: clamp(3px, 0.25vw, 5px) solid var(--theme-color, var(--panel-line)); 
+    border-radius: 50%; z-index: 3; transition: all 0.5s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.1); 
   }
 
-  /* ============================================================
-     좌측 패널 : 연표 스타일 타임라인
-     ============================================================ */
-  .left-panel {
-    background: var(--panel-bg);
-    border: 1px solid var(--panel-line);
-    border-top: clamp(6px, 0.5vw, 12px) solid var(--rest);
-    border-radius: 6px;
-    padding: clamp(22px, 2vh, 48px) clamp(20px, 1.8vw, 40px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    position: relative;
-  }
+  .tl-text { display: flex; flex-direction: column; gap: clamp(6px, 0.8vh, 12px); }
+  .tl-time { font-weight: 700; font-size: clamp(1.6rem, 1.5vw, 2.8rem); font-variant-numeric: tabular-nums; }
+  .tl-label { font-weight: 600; font-size: clamp(1.4rem, 1.4vw, 2.6rem); color: var(--ink-soft); line-height: 1.3; }
 
-  .panel-label {
-    font-weight: 700;
-    font-size: clamp(1.6rem, 1.8vw, 3.2rem);
-    letter-spacing: 0.25em;
-    text-indent: 0.25em;
-    color: var(--rest);
-    text-align: center;
-    padding-bottom: clamp(10px, 1.2vh, 24px);
-    margin-bottom: clamp(14px, 1.8vh, 28px);
-    border-bottom: 2px solid var(--panel-line);
-    flex-shrink: 0;
-    display: none;
+  /* 현재 및 과거 상태 */
+  .tl-item.current { 
+    background: linear-gradient(135deg, var(--theme-soft) 0%, var(--bg-card) 100%); 
+    border-width: clamp(3px, 0.3vw, 5px); box-shadow: 0 6px 20px var(--theme-shadow); 
+    transform: scale(1.03); transform-origin: left center; 
   }
+  .tl-item.current::before { 
+    width: clamp(20px, 1.3vw, 32px); height: clamp(20px, 1.3vw, 32px); 
+    border-color: #ffffff; box-shadow: 0 0 0 clamp(4px, 0.3vw, 7px) var(--theme-shadow); 
+  }
+  .tl-item.past { opacity: 0.5; }
 
-  /* === 타임라인 래퍼 (SVG 포함) === */
-  .timeline-wrapper {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-  }
+  /* 우측 패널 */
+  .right-panel { background: var(--bg-card); border: 1px solid var(--line); border-top: clamp(6px, 0.5vw, 12px) solid var(--accent); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; min-height: 0; }
+  .right-header { display: flex; align-items: center; gap: clamp(14px, 1.5vw, 36px); width: 100%; padding-bottom: clamp(12px, 1.4vh, 28px); margin-bottom: clamp(16px, 1.8vh, 36px); border-bottom: 2px solid var(--line); }
+  .right-header img { width: clamp(54px, 3.5vw, 120px); }
+  .right-header .school-name, .right-header .exam-title { font-weight: 700; font-size: clamp(1.6rem, 1.8vw, 3rem); white-space: nowrap; }
+  .right-header .school-name { color: var(--navy); }
+  .right-header .exam-title { color: var(--accent); }
+  .divider-v { width: clamp(2px, 0.15vw, 4px); height: clamp(36px, 3.5vh, 72px); background: var(--line); }
 
-  /* === 타임라인 컨테이너 === */
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(12px, 1.6vh, 24px);
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: visible;
-    position: relative;
-    z-index: 2;
-    padding-left: clamp(12px, 1.2vw, 20px);
-    padding-right: clamp(12px, 1.5vw, 24px);
-  }
+  .main-display { display: flex; flex-direction: column; align-items: center; gap: clamp(16px, 2vh, 40px); width: 100%; flex: 1; justify-content: center; }
+  .clock-box { display: flex; flex-direction: column; align-items: center; }
+  .clock-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.4em; color: var(--ink-muted); padding: clamp(4px, 0.5vh, 10px) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); width: 100%; text-align: center; }
+  .date-line { font-weight: 500; font-size: clamp(1.2rem, 1.3vw, 2.2rem); color: var(--ink-soft); margin: clamp(6px, 0.7vh, 14px) 0 clamp(4px, 0.4vh, 10px); }
+  .clock { font-weight: 700; font-size: clamp(8rem, 16vw, 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
+  .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
-  /* 타임라인 스크롤바 */
-  .timeline::-webkit-scrollbar {
-    width: clamp(8px, 0.6vw, 14px);
+  /* 상태 카드 */
+  .status-card { 
+    width: 100%; max-width: clamp(720px, 60vw, 1600px); 
+    background: var(--theme-soft, var(--bg)); 
+    border: 2px solid var(--theme-color, var(--line)); 
+    border-left: clamp(6px, 0.5vw, 12px) solid var(--theme-color, var(--navy)); 
+    border-radius: 6px; padding: clamp(18px, 2vh, 40px) 0; 
+    display: flex; flex-direction: column; align-items: center; gap: clamp(6px, 0.7vh, 14px); transition: all 0.5s ease; 
   }
-  .timeline::-webkit-scrollbar-track {
-    background: var(--panel-bg);
-    border-radius: 4px;
-  }
-  .timeline::-webkit-scrollbar-thumb {
-    background: var(--panel-line);
-    border-radius: 4px;
-  }
-  .timeline::-webkit-scrollbar-thumb:hover {
-    background: var(--rest);
-  }
-
-  /* === 타임라인 아이템 (각 일정 박스) === */
-  .tl-item {
-    background: var(--bg-card);
-    border: clamp(2px, 0.15vw, 3px) solid var(--panel-line);
-    border-radius: 6px;
-    padding: clamp(10px, 1vh, 16px) clamp(16px, 1.5vw, 28px);
-    position: relative;
-    transition: all 0.5s ease;
-    flex-shrink: 0;
-    min-height: clamp(60px, 6vh, 90px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: clamp(8px, 1vw, 16px);
-    margin-right: clamp(8px, 1vw, 16px);
-  }
-
-  /* 타임라인 아이템 점 (연표 스타일) - SVG 선의 중심을 통과 */
-  .tl-item::before {
-    content: '';
-    position: absolute;
-    left: clamp(-12px, -1vw, -20px);
-    top: 50%;
-    transform: translateY(-50%);
-    width: clamp(16px, 1.1vw, 26px);
-    height: clamp(16px, 1.1vw, 26px);
-    background: var(--bg-card);
-    border: clamp(3px, 0.25vw, 5px) solid var(--panel-line);
-    border-radius: 50%;
-    z-index: 3;
-    transition: all 0.5s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  /* 활동 유형별 박스 테두리 색상 - 원 내부 채우기 */
-  .tl-item.prep {
-    border-color: var(--prep);
-  }
-  .tl-item.prep::before {
-    border-color: var(--prep);
-    background: var(--prep);
-  }
-
-  .tl-item.exam {
-    border-color: var(--accent);
-  }
-  .tl-item.exam::before {
-    border-color: var(--accent);
-    background: var(--accent);
-  }
-
-  .tl-item.rest {
-    border-color: var(--rest);
-  }
-  .tl-item.rest::before {
-    border-color: var(--rest);
-    background: var(--rest);
-  }
-
-  .tl-item.move {
-    border-color: var(--move);
-  }
-  .tl-item.move::before {
-    border-color: var(--move);
-    background: var(--move);
-  }
-
-  /* 타임라인 텍스트 */
-  .tl-text {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(4px, 0.6vh, 10px);
-  }
-
-  .tl-time {
-    font-weight: 700;
-    font-size: clamp(1.6rem, 1.5vw, 2.8rem);
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-  }
-
-  .tl-label {
-    font-weight: 600;
-    font-size: clamp(1.4rem, 1.4vw, 2.6rem);
-    color: var(--ink-soft);
-    letter-spacing: 0.03em;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  /* === 현재 활동 하이라이트 === */
-  .tl-item.current {
-    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-card) 100%);
-    border-width: clamp(3px, 0.3vw, 5px);
-    box-shadow: 0 6px 20px rgba(168, 50, 50, 0.25);
-    transform: scale(1.03);
-    transform-origin: left center;
-  }
-
-  .tl-item.current::before {
-    width: clamp(20px, 1.3vw, 32px);
-    height: clamp(20px, 1.3vw, 32px);
-    border-color: #ffffff;
-    box-shadow: 0 0 0 clamp(4px, 0.3vw, 7px) rgba(168, 50, 50, 0.2);
-  }
-
-  /* 활동 유형별 현재 하이라이트 */
-  .tl-item.current.rest {
-    background: linear-gradient(135deg, var(--rest-soft) 0%, var(--bg-card) 100%);
-    border-color: var(--rest);
-    box-shadow: 0 6px 20px rgba(63, 107, 38, 0.25);
-  }
-  .tl-item.current.rest::before {
-    background: var(--rest);
-    border-color: #ffffff;
-  }
-
-  .tl-item.current.prep {
-    background: linear-gradient(135deg, var(--prep-soft) 0%, var(--bg-card) 100%);
-    border-color: var(--prep);
-    box-shadow: 0 6px 20px rgba(30, 58, 95, 0.25);
-  }
-  .tl-item.current.prep::before {
-    background: var(--prep);
-    border-color: #ffffff;
-  }
-
-  .tl-item.current.move {
-    background: linear-gradient(135deg, var(--move-soft) 0%, var(--bg-card) 100%);
-    border-color: var(--move);
-    box-shadow: 0 6px 20px rgba(138, 90, 43, 0.25);
-  }
-  .tl-item.current.move::before {
-    background: var(--move);
-    border-color: #ffffff;
-  }
-
-  .tl-item.current.exam {
-    background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-card) 100%);
-    border-color: var(--accent);
-    box-shadow: 0 6px 20px rgba(168, 50, 50, 0.25);
-  }
-  .tl-item.current.exam::before {
-    background: var(--accent);
-    border-color: #ffffff;
-  }
-
-  /* 지나간 활동 */
-  .tl-item.past {
-    opacity: 0.5;
-  }
-
-  /* ============================================================
-     우측 패널 : 현재 상태
-     ============================================================ */
-  .right-panel {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-top: clamp(6px, 0.5vw, 12px) solid var(--accent);
-    border-radius: 6px;
-    padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .right-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(14px, 1.5vw, 36px);
-    width: 100%;
-    padding-bottom: clamp(12px, 1.4vh, 28px);
-    margin-bottom: clamp(16px, 1.8vh, 36px);
-    border-bottom: 2px solid var(--line);
-    flex-shrink: 0;
-  }
-
-  .right-header img {
-    width: clamp(54px, 3.5vw, 120px);
-    height: auto;
-  }
-
-  .right-header .school-name {
-    font-weight: 700;
-    font-size: clamp(1.6rem, 1.8vw, 3rem);
-    letter-spacing: 0;
-    color: var(--navy);
-    white-space: nowrap;
-  }
-
-  .right-header .divider-v {
-    width: clamp(2px, 0.15vw, 4px);
-    height: clamp(36px, 3.5vh, 72px);
-    background: var(--line);
-  }
-
-  .right-header .exam-title {
-    font-weight: 700;
-    font-size: clamp(1.6rem, 1.8vw, 3rem);
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-
-  .main-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: clamp(16px, 2vh, 40px);
-    width: 100%;
-    flex: 1;
-  }
-
-  .clock-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .clock-label {
-    font-weight: 600;
-    font-size: clamp(1rem, 1.1vw, 1.8rem);
-    letter-spacing: 0.4em;
-    text-indent: 0.4em;
-    color: var(--ink-muted);
-    padding: clamp(4px, 0.5vh, 10px) clamp(16px, 1.2vw, 28px);
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .date-line {
-    font-weight: 500;
-    font-size: clamp(1.2rem, 1.3vw, 2.2rem);
-    letter-spacing: 0.15em;
-    color: var(--ink-soft);
-    margin-top: clamp(6px, 0.7vh, 14px);
-    margin-bottom: clamp(4px, 0.4vh, 10px);
-  }
-
-  .clock {
-    font-weight: 700;
-    font-size: clamp(8rem, 16vw, 26rem);
-    line-height: 0.9;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-  }
-
-  .clock .colon {
-    margin: 0 0.03em;
-    color: var(--accent);
-  }
-
-  .status-card {
-    width: 100%;
-    max-width: clamp(720px, 60vw, 1600px);
-    background: var(--bg);
-    border: 2px solid var(--line);
-    border-left: clamp(6px, 0.5vw, 12px) solid var(--navy);
-    border-radius: 6px;
-    padding: clamp(18px, 2vh, 40px) clamp(24px, 2.5vw, 64px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(6px, 0.7vh, 14px);
-    transition: all 0.5s ease;
-  }
-
-  .status-card.exam {
-    border-left-color: var(--accent);
-    background: var(--accent-soft);
-    border-color: var(--accent);
-  }
-
-  .status-card.rest {
-    border-left-color: var(--rest);
-    background: var(--rest-soft);
-    border-color: var(--rest);
-  }
-
-  .status-card.move {
-    border-left-color: var(--move);
-    background: var(--move-soft);
-    border-color: var(--move);
-  }
-
-  .status-card.prep {
-    border-left-color: var(--prep);
-    background: var(--prep-soft);
-    border-color: var(--prep);
-  }
-
-  .status-card.ended {
-    opacity: 0.6;
-    border-left-color: var(--ink-muted);
-  }
-
-  .status-label {
-    font-weight: 600;
-    font-size: clamp(1rem, 1.1vw, 1.8rem);
-    letter-spacing: 0.3em;
-    text-indent: 0.3em;
-    color: var(--ink-muted);
-  }
-
-  .status-title {
-    font-weight: 700;
-    font-size: clamp(3rem, 3.8vw, 7rem);
-    letter-spacing: 0.04em;
-    color: var(--navy);
-    text-align: center;
-    line-height: 1.1;
-  }
-
-  .status-card.exam .status-title { color: var(--accent); }
-  .status-card.rest .status-title { color: var(--rest); }
-  .status-card.move .status-title { color: var(--move); }
-  .status-card.prep .status-title { color: var(--prep); }
-
-  .status-time {
-    font-weight: 700;
-    font-size: clamp(1.8vw, 2vw, 3rem);
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.02em;
-  }
-
-  .status-sub {
-    font-size: clamp(1.1rem, 1.2vw, 2rem);
-    color: var(--ink-soft);
-    letter-spacing: 0.05em;
-    text-align: center;
-  }
-
-  @media (max-aspect-ratio: 4/3) {
-    .clock {
-      font-size: clamp(6rem, 12vw, 18rem);
-    }
-  }
+  .status-card.ended { opacity: 0.6; border-left-color: var(--ink-muted); }
+  .status-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.3em; color: var(--ink-muted); }
+  .status-title { font-weight: 700; font-size: clamp(3rem, 3.8vw, 7rem); color: var(--theme-color, var(--navy)); text-align: center; }
+  .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; }
+  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); }
 
   @media (max-width: 900px) {
     .corner { width: 28px; height: 28px; }
-    .corner.tl { top: 14px; left: 14px; }
-    .corner.tr { top: 14px; right: 14px; }
-    .corner.bl { bottom: 14px; left: 14px; }
-    .corner.br { bottom: 14px; right: 14px; }
+    .corner.tl { top: 14px; left: 14px; } .corner.tr { top: 14px; right: 14px; }
+    .corner.bl { bottom: 14px; left: 14px; } .corner.br { bottom: 14px; right: 14px; }
     .accent-bar { height: 20vh; width: 4px; }
-    .right-header {
-      flex-direction: column;
-      gap: 8px;
-    }
-    .right-header .divider-v { display: none; }
-    .dashboard {
-      grid-template-columns: 1fr;
-      gap: 2vh;
-    }
+    .right-header { flex-direction: column; gap: 8px; }
+    .divider-v { display: none; }
+    .dashboard { grid-template-columns: 1fr; gap: 2vh; }
+    .clock { font-size: clamp(6rem, 12vw, 18rem); }
   }
 </style>
 </head>
 <body>
 
-  <div class="corner tl"></div>
-  <div class="corner tr"></div>
-  <div class="corner bl"></div>
-  <div class="corner br"></div>
-
-  <div class="accent-bar left"></div>
-  <div class="accent-bar right"></div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="accent-bar left"></div><div class="accent-bar right"></div>
 
   <div class="main">
-
     <div class="dashboard">
-
       <div class="left-panel">
-        <div class="panel-label">시 험 일 정</div>
-        
         <div class="timeline-wrapper">
-          <!-- 타임라인 아이템 -->
-          <div class="timeline" id="timeline">
-            <!-- JS로 동적 생성 -->
-          </div>
+          <div class="timeline" id="timeline"></div>
         </div>
       </div>
 
       <div class="right-panel">
-
         <div class="right-header">
           <img src="school-logo.png" alt="학교 로고">
           <div class="school-name">동국대학교사범대학부속중학교</div>
@@ -591,13 +158,10 @@
         </div>
 
         <div class="main-display">
-
           <div class="clock-box">
             <div class="clock-label">현재시각</div>
             <div class="date-line" id="date">&nbsp;</div>
-            <div class="clock">
-              <span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span>
-            </div>
+            <div class="clock"><span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span></div>
           </div>
 
           <div class="status-card" id="status-card">
@@ -606,159 +170,88 @@
             <div class="status-time" id="status-time">-</div>
             <div class="status-sub" id="status-sub">&nbsp;</div>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 
 <script>
   const schedule = [
     { start: 525, end: 535, type: 'move', label: '이동반 시험실로 이동', sub: '지정된 시험실로 이동' },
     { start: 535, end: 540, type: 'prep', label: '1교시 시험 준비', sub: '문제지·답안지 수령' },
-    { start: 540, end: 585, type: 'exam', label: '1교시 시험',     sub: '' },
-    { start: 585, end: 595, type: 'rest', label: '쉬는 시간',       sub: '화장실 이용' },
+    { start: 540, end: 585, type: 'exam', label: '1교시 시험', sub: '' },
+    { start: 585, end: 595, type: 'rest', label: '쉬는 시간', sub: '화장실 이용' },
     { start: 595, end: 600, type: 'prep', label: '2교시 시험 준비', sub: '문제지·답안지 수령' },
-    { start: 600, end: 645, type: 'exam', label: '2교시 시험',     sub: '' },
-    { start: 645, end: 655, type: 'rest', label: '쉬는 시간',       sub: '화장실 이용' },
+    { start: 600, end: 645, type: 'exam', label: '2교시 시험', sub: '' },
+    { start: 645, end: 655, type: 'rest', label: '쉬는 시간', sub: '화장실 이용' },
     { start: 655, end: 660, type: 'prep', label: '3교시 시험 준비', sub: '문제지·답안지 수령' },
-    { start: 660, end: 705, type: 'exam', label: '3교시 시험',     sub: '' }
+    { start: 660, end: 705, type: 'exam', label: '3교시 시험', sub: '' }
   ];
 
-  const hoursEl = document.getElementById('hours');
-  const minutesEl = document.getElementById('minutes');
-  const dateEl = document.getElementById('date');
-  const timelineEl = document.getElementById('timeline');
-  const statusCard = document.getElementById('status-card');
-  const statusLabel = document.getElementById('status-label');
-  const statusTitle = document.getElementById('status-title');
-  const statusTime = document.getElementById('status-time');
-  const statusSub = document.getElementById('status-sub');
-
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-
-  function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-  function formatTime(mins) {
-    const h = Math.floor(mins / 60);
-    const m = mins % 60;
-    return pad(h) + ':' + pad(m);
-  }
+  const formatTime = mins => `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+  
+  const els = {
+    hours: document.getElementById('hours'), minutes: document.getElementById('minutes'),
+    date: document.getElementById('date'), timeline: document.getElementById('timeline'),
+    card: document.getElementById('status-card'), label: document.getElementById('status-label'),
+    title: document.getElementById('status-title'), time: document.getElementById('status-time'),
+    sub: document.getElementById('status-sub')
+  };
 
   function buildTimeline() {
-    timelineEl.innerHTML = '';
-    schedule.forEach((item, idx) => {
-      const div = document.createElement('div');
-      div.className = `tl-item ${item.type}`;
-      div.dataset.idx = idx;
-      
-      const textDiv = document.createElement('div');
-      textDiv.className = 'tl-text';
-      
-      const timeSpan = document.createElement('div');
-      timeSpan.className = 'tl-time';
-      timeSpan.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
-      
-      const labelSpan = document.createElement('div');
-      labelSpan.className = 'tl-label';
-      labelSpan.textContent = item.label;
-      
-      textDiv.appendChild(timeSpan);
-      textDiv.appendChild(labelSpan);
-      div.appendChild(textDiv);
-      
-      timelineEl.appendChild(div);
-    });
+    els.timeline.innerHTML = schedule.map((item, idx) => `
+      <div class="tl-item ${item.type}" data-idx="${idx}">
+        <div class="tl-text">
+          <div class="tl-time">${formatTime(item.start)} ~ ${formatTime(item.end)}</div>
+          <div class="tl-label">${item.label}</div>
+        </div>
+      </div>
+    `).join('');
   }
 
   function updateStatus(now) {
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+    const currentIdx = schedule.findIndex(item => currentMins >= item.start && currentMins < item.end);
 
-    let currentIdx = -1;
-    for (let i = 0; i < schedule.length; i++) {
-      if (currentMinutes >= schedule[i].start && currentMinutes < schedule[i].end) {
-        currentIdx = i;
-        break;
-      }
-    }
-
-    const items = timelineEl.querySelectorAll('.tl-item');
-    items.forEach((el, i) => {
-      el.classList.remove('current', 'past');
-      if (i === currentIdx) {
-        el.classList.add('current');
-      } else if (currentMinutes >= schedule[i].end) {
-        el.classList.add('past');
-      }
+    Array.from(els.timeline.children).forEach((el, i) => {
+      el.className = `tl-item ${schedule[i].type} ${i === currentIdx ? 'current' : currentMins >= schedule[i].end ? 'past' : ''}`;
     });
 
-    statusCard.classList.remove('exam', 'rest', 'move', 'prep', 'ended');
-
-    const firstStart = schedule[0].start;
-    const lastEnd = schedule[schedule.length - 1].end;
-
+    els.card.className = 'status-card';
+    
     if (currentIdx >= 0) {
       const item = schedule[currentIdx];
-      statusCard.classList.add(item.type);
-      statusLabel.textContent = '지금은';
-      statusTitle.textContent = item.label;
-      statusTime.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
-      statusSub.textContent = item.sub || '\u00A0';
-    } else if (currentMinutes < firstStart) {
-      statusLabel.textContent = '안내';
-      statusTitle.textContent = '잠시 후 시험 시작';
-      statusTime.textContent = `${formatTime(firstStart)} 시작 예정`;
-      statusSub.textContent = '시험 준비를 시작해 주세요';
-    } else if (currentMinutes >= lastEnd) {
-      statusCard.classList.add('ended');
-      statusLabel.textContent = '안내';
-      statusTitle.textContent = '시험 종료';
-      statusTime.textContent = '오늘 시험이 모두 끝났습니다';
-      statusSub.textContent = '\u00A0';
+      els.card.classList.add(item.type);
+      els.label.textContent = '지금은'; els.title.textContent = item.label;
+      els.time.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
+      els.sub.textContent = item.sub || '\u00A0';
+    } else if (currentMins < schedule[0].start) {
+      els.label.textContent = '안내'; els.title.textContent = '잠시 후 시험 시작';
+      els.time.textContent = `${formatTime(schedule[0].start)} 시작 예정`; els.sub.textContent = '시험 준비를 시작해 주세요';
+    } else if (currentMins >= schedule[schedule.length - 1].end) {
+      els.card.classList.add('ended');
+      els.label.textContent = '안내'; els.title.textContent = '시험 종료';
+      els.time.textContent = '오늘 시험이 모두 끝났습니다'; els.sub.textContent = '\u00A0';
     } else {
-      statusLabel.textContent = '대기';
-      statusTitle.textContent = '다음 활동 대기 중';
-      statusTime.textContent = '\u00A0';
-      statusSub.textContent = '\u00A0';
+      els.label.textContent = '대기'; els.title.textContent = '다음 활동 대기 중';
+      els.time.textContent = '\u00A0'; els.sub.textContent = '\u00A0';
     }
   }
 
   function updateAll() {
     const now = new Date();
-    const h = pad(now.getHours());
-    const m = pad(now.getMinutes());
-
-    if (hoursEl.textContent !== h) hoursEl.textContent = h;
-    if (minutesEl.textContent !== m) minutesEl.textContent = m;
-
-    const y = now.getFullYear();
-    const mo = now.getMonth() + 1;
-    const d = now.getDate();
-    const w = weekdays[now.getDay()];
-    const dateStr = `${y}년 ${mo}월 ${d}일 ${w}요일`;
-    if (dateEl.textContent !== dateStr) dateEl.textContent = dateStr;
-
+    els.hours.textContent = String(now.getHours()).padStart(2, '0');
+    els.minutes.textContent = String(now.getMinutes()).padStart(2, '0');
+    els.date.textContent = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${['일', '월', '화', '수', '목', '금', '토'][now.getDay()]}요일`;
     updateStatus(now);
   }
 
-  buildTimeline();
-  updateAll();
+  buildTimeline(); updateAll();
+  
+  const msUntilNextMinute = (60 - new Date().getSeconds()) * 1000 - new Date().getMilliseconds();
+  setTimeout(() => { updateAll(); setInterval(updateAll, 60000); }, msUntilNextMinute);
 
-  const now = new Date();
-  const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
-
-  setTimeout(() => {
-    updateAll();
-    setInterval(updateAll, 60000);
-  }, msUntilNextMinute);
-
-  if ('wakeLock' in navigator) {
-    navigator.wakeLock.request('screen').catch(() => {});
-  }
+  if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(() => {});
 </script>
-
 </body>
 </html>
