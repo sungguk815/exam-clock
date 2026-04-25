@@ -227,8 +227,8 @@
       els.time.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
       els.sub.textContent = item.sub || '\u00A0';
     } else if (currentMins < schedule[0].start) {
-      els.label.textContent = '안내'; els.title.textContent = '잠시 후 시험 시작';
-      els.time.textContent = `${formatTime(schedule[0].start)} 시작 예정`; els.sub.textContent = '시험 준비를 시작해 주세요';
+      els.label.textContent = '안내'; els.title.textContent = '08시 40분까지 등교';
+      els.time.textContent = '\u00A0'; els.sub.textContent = '\u00A0';
     } else if (currentMins >= schedule[schedule.length - 1].end) {
       els.card.classList.add('ended');
       els.label.textContent = '안내'; els.title.textContent = '시험 종료';
