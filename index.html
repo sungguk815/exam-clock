@@ -82,12 +82,15 @@
 
   /* 현재 및 과거 상태 */
   .tl-item.current { 
-    background: linear-gradient(135deg, var(--theme-soft) 0%, var(--bg-card) 100%); 
-    border-width: clamp(3px, 0.3vw, 5px); box-shadow: 0 6px 20px var(--theme-shadow); 
-    transform: scale(1.03); transform-origin: left center; 
+    background: var(--theme-color, var(--navy));
+    border-width: clamp(3px, 0.3vw, 5px);
+    box-shadow: 0 8px 28px var(--theme-shadow), 0 2px 8px rgba(0,0,0,0.15);
   }
+  .tl-item.current .tl-time,
+  .tl-item.current .tl-label { color: #ffffff; }
   .tl-item.current::before { 
     width: clamp(20px, 1.3vw, 32px); height: clamp(20px, 1.3vw, 32px); 
+    background: #ffffff;
     border-color: #ffffff; box-shadow: 0 0 0 clamp(4px, 0.3vw, 7px) var(--theme-shadow); 
   }
   .tl-item.past { opacity: 0.5; }
