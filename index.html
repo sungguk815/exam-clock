@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -18,7 +19,6 @@
     --panel-line: #8fb378;
   }
 
-  /* 상태별 통합 테마 변수 */
   .exam { --theme-color: var(--accent); --theme-soft: var(--accent-soft); --theme-shadow: rgba(168, 50, 50, 0.25); }
   .rest { --theme-color: var(--rest); --theme-soft: var(--rest-soft); --theme-shadow: rgba(63, 107, 38, 0.25); }
   .move { --theme-color: var(--move); --theme-soft: var(--move-soft); --theme-shadow: rgba(138, 90, 43, 0.25); }
@@ -31,7 +31,6 @@
     position: relative; -webkit-font-smoothing: antialiased;
   }
 
-  /* 4개 모서리 코너 마크 */
   .corner { position: fixed; width: clamp(42px, 2.5vw, 90px); height: clamp(42px, 2.5vw, 90px); pointer-events: none; z-index: 5; }
   .corner::before, .corner::after { content: ''; position: absolute; background: var(--navy); }
   .corner.tl { top: clamp(18px, 1.2vw, 36px); left: clamp(18px, 1.2vw, 36px); }
@@ -47,7 +46,6 @@
   .main { height: 100%; display: flex; flex-direction: column; padding: clamp(20px, 3vh, 60px) clamp(40px, 4vw, 120px); }
   .dashboard { flex: 1; display: grid; grid-template-columns: minmax(320px, 32%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
 
-  /* 좌측 패널 */
   .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(20px, 1.8vw, 40px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
   .timeline-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
   .timeline { display: flex; flex-direction: column; gap: clamp(16px, 2vh, 28px); flex: 1; overflow-y: auto; padding: 0 clamp(12px, 1.5vw, 24px) 0 clamp(12px, 1.2vw, 20px); }
@@ -56,15 +54,12 @@
   .timeline::-webkit-scrollbar-track { background: var(--panel-bg); border-radius: 4px; }
   .timeline::-webkit-scrollbar-thumb { background: var(--panel-line); border-radius: 4px; }
 
-  /* 타임라인 아이템 (테마 변수 적용 및 여백 확대) */
   .tl-item { 
     background: var(--bg-card); 
     border: clamp(2px, 0.15vw, 3px) solid var(--theme-color, var(--panel-line)); 
     border-radius: 6px; 
-    /* 박스선과 내용 사이의 상하좌우 여백을 눈에 띄게 늘렸습니다 */
     padding: clamp(16px, 2vh, 26px) clamp(24px, 2.5vw, 40px); 
     position: relative; transition: all 0.5s ease; 
-    /* 여백이 커진 만큼 기본 높이도 키웠습니다 */
     min-height: clamp(74px, 7vh, 100px); 
     display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(8px, 1vw, 16px); 
   }
@@ -80,7 +75,6 @@
   .tl-time { font-weight: 700; font-size: clamp(1.6rem, 1.5vw, 2.8rem); font-variant-numeric: tabular-nums; }
   .tl-label { font-weight: 600; font-size: clamp(1.4rem, 1.4vw, 2.6rem); color: var(--ink-soft); line-height: 1.3; white-space: nowrap; }
 
-  /* 현재 및 과거 상태 */
   .tl-item.current { 
     background: var(--theme-color, var(--navy));
     border-width: clamp(3px, 0.3vw, 5px);
@@ -95,7 +89,6 @@
   }
   .tl-item.past { opacity: 0.5; }
 
-  /* 우측 패널 */
   .right-panel { background: var(--bg-card); border: 1px solid var(--line); border-top: clamp(6px, 0.5vw, 12px) solid var(--accent); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; min-height: 0; }
   .right-header { display: flex; align-items: center; gap: clamp(14px, 1.5vw, 36px); width: 100%; padding-bottom: clamp(12px, 1.4vh, 28px); margin-bottom: clamp(16px, 1.8vh, 36px); border-bottom: 2px solid var(--line); }
   .right-header img { width: clamp(54px, 3.5vw, 120px); }
@@ -111,7 +104,6 @@
   .clock { font-weight: 700; font-size: clamp(8rem, 16vw, 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
   .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
-  /* 상태 카드 */
   .status-card { 
     width: 100%; max-width: clamp(720px, 60vw, 1600px); 
     background: var(--theme-soft, var(--bg)); 
@@ -187,9 +179,9 @@
     { start: 585, end: 595, type: 'rest', label: '쉬는 시간(화장실 이용)', sub: '' },
     { start: 595, end: 600, type: 'prep', label: '2교시 시험준비(착석)', sub: '답안지·문제지 수령' },
     { start: 600, end: 645, type: 'exam', label: '2교시 시험', sub: '' },
-    { start: 645, end: 655, type: 'rest', label: '쉬는 시간(화장실 이용)', sub: '' },
-    { start: 655, end: 660, type: 'prep', label: '3교시 시험준비(착석)', sub: '답안지·문제지 수령' },
-    { start: 660, end: 705, type: 'exam', label: '3교시 시험', sub: '' }
+    // { start: 645, end: 655, type: 'rest', label: '쉬는 시간(화장실 이용)', sub: '' },
+    // { start: 655, end: 660, type: 'prep', label: '3교시 시험준비(착석)', sub: '답안지·문제지 수령' },
+    // { start: 660, end: 705, type: 'exam', label: '3교시 시험', sub: '' }
   ];
 
   const formatTime = mins => `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
@@ -259,3 +251,4 @@
 </script>
 </body>
 </html>
+```
