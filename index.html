@@ -43,11 +43,11 @@
   .accent-bar.left { left: 0; } .accent-bar.right { right: 0; }
 
   .main { height: 100%; display: flex; flex-direction: column; padding: clamp(20px, 3vh, 60px) clamp(40px, 4vw, 120px); }
-  .dashboard { flex: 1; display: grid; grid-template-columns: minmax(320px, 32%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
+  .dashboard { flex: 1; display: grid; grid-template-columns: minmax(460px, 45%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
 
-  .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(20px, 1.8vw, 40px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
+  .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(16px, 1.5vw, 32px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
   .timeline-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .timeline { display: flex; flex-direction: column; gap: clamp(16px, 2vh, 28px); flex: 1; overflow-y: auto; padding: 0 clamp(12px, 1.5vw, 24px) 0 clamp(12px, 1.2vw, 20px); }
+  .timeline { display: flex; flex-direction: column; gap: clamp(16px, 2vh, 28px); flex: 1; overflow-y: auto; padding: 0 clamp(8px, 1vw, 16px) 0 clamp(8px, 1vw, 16px); }
   
   .timeline::-webkit-scrollbar { width: clamp(8px, 0.6vw, 14px); }
   .timeline::-webkit-scrollbar-track { background: var(--panel-bg); border-radius: 4px; }
@@ -57,10 +57,10 @@
     background: var(--bg-card); 
     border: clamp(2px, 0.15vw, 3px) solid var(--theme-color, var(--panel-line)); 
     border-radius: 6px; 
-    padding: clamp(16px, 2vh, 26px) clamp(24px, 2.5vw, 40px); 
+    padding: clamp(16px, 2vh, 26px) clamp(18px, 2vw, 32px); 
     position: relative; transition: all 0.5s ease; 
     min-height: clamp(74px, 7vh, 100px); 
-    display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(8px, 1vw, 16px); 
+    display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(4px, 0.6vw, 10px); 
   }
   .tl-item::before { 
     content: ''; position: absolute; left: clamp(-12px, -1vw, -20px); top: 50%; transform: translateY(-50%); 
@@ -419,8 +419,8 @@
         "start": 585,
         "end": 595,
         "type": "move",
-        "label": "2,4열 본반으로 이동",
-        "sub": "영어 듣기(본반)"
+        "label": "2열,4열 본반으로 이동",
+        "sub": "학년별 영어듣기평가(본반)"
       },
       {
         "start": 595,
