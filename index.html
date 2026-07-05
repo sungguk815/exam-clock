@@ -101,9 +101,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    max-width: clamp(720px, 60vw, 1600px); /* status-card와 가로폭 일치 */
     margin-bottom: clamp(16px, 2.5vh, 40px); /* 시간과 안내 카드 사이에 약 1줄 공간 확보 */
   }
   .clock-badge {
+    position: absolute;
+    left: clamp(20px, 2vw, 40px);
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -113,15 +119,16 @@
     font-weight: 700;
     padding: 0.2em 0.8em;
     border-radius: 4px;
-    margin-right: clamp(8px, 0.8vw, 16px);
     letter-spacing: 0.1em;
     white-space: nowrap;
     line-height: 1;
   }
   .date-line {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* 날짜 글자는 가운데 정렬 */
+    width: 100%;
     font-weight: 600;
     font-size: clamp(1.2rem, 1.3vw, 2.2rem);
     color: var(--ink-soft);
@@ -139,15 +146,18 @@
   }
   .status-card.ended { opacity: 0.6; }
   .status-header {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: clamp(10px, 1.2vw, 24px);
+    justify-content: center; /* 타이틀 글자는 가운데 정렬 */
     width: 100%;
-    flex-wrap: wrap;
-    padding: 0 clamp(20px, 2vw, 40px);
+    padding: 0;
   }
   .status-label {
+    position: absolute;
+    left: clamp(20px, 2vw, 40px);
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -359,7 +369,21 @@
   }
 
   function updateAll() {
-    const now = new Date();
+    let now = new Date();
+
+    // URL 파라미터로 특정 시각 테스트 가능 (예: ?time=09:10)
+    const urlParams = new URLSearchParams(window.location.search);
+    const testTime = urlParams.get('time');
+    if (testTime && testTime.includes(':')) {
+      const [h, m] = testTime.split(':').map(Number);
+      if (!isNaN(h) && !isNaN(m)) {
+        now = new Date(now);
+        now.setHours(h);
+        now.setMinutes(m);
+        now.setSeconds(0);
+      }
+    }
+
     els.hours.textContent = String(now.getHours()).padStart(2, '0');
     els.minutes.textContent = String(now.getMinutes()).padStart(2, '0');
     els.date.textContent = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${['일', '월', '화', '수', '목', '금', '토'][now.getDay()]}요일`;
@@ -407,3 +431,4 @@
 </script>
 </body>
 </html>
+```
