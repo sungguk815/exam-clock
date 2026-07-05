@@ -159,8 +159,31 @@
   .clock { font-weight: 700; font-size: clamp(8rem, min(16vw, 24vh), 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; text-align: center; }
   .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
-  .status-card { 
-    width: 100%; max-width: 1400px; 
+  .status-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    position: relative;
+  }
+  .status-card.ended { opacity: 0.6; }
+  .status-top-line {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-weight: 600;
+    font-size: clamp(1.1rem, 1.2vw, 2rem);
+    color: var(--ink-soft);
+    margin: clamp(4px, 0.6vh, 12px) 0 clamp(4px, 0.4vh, 10px);
+    padding: 0 clamp(80px, 8vw, 140px);
+    word-break: keep-all;
+    text-align: center;
+  }
+  .status-card-inner { 
+    width: 100%; 
     background: var(--theme-soft, var(--bg)); 
     border: 2px solid var(--theme-color, var(--line)); 
     border-radius: 6px; padding: clamp(16px, 1.8vh, 36px) 0; 
@@ -168,7 +191,6 @@
     position: relative;
     overflow: hidden;
   }
-  .status-card.ended { opacity: 0.6; }
   .status-header {
     position: relative;
     display: flex;
@@ -187,10 +209,10 @@
     justify-content: center;
     background: var(--theme-color, var(--navy));
     color: #ffffff;
-    font-size: clamp(0.9rem, 1vw, 1.6rem);
+    font-size: clamp(0.85rem, 0.9vw, 1.3rem);
     font-weight: 700;
     padding: 0.2em 0.8em;
-    border-radius: 6px;
+    border-radius: 4px;
     letter-spacing: 0.1em;
     white-space: nowrap;
     transition: all 0.5s ease;
@@ -198,7 +220,7 @@
   }
   .status-title { font-weight: 700; font-size: clamp(2.8rem, min(3.8vw, 6.5vh), 7rem); color: var(--theme-color, var(--navy)); text-align: center; word-break: keep-all; line-height: 1.2; }
   .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; text-align: center; }
-  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); text-align: center; word-break: keep-all; }
+  .status-sub { font-size: clamp(1.5rem, 1.8vw, 3rem); font-weight: 600; color: var(--ink-soft); text-align: center; word-break: keep-all; line-height: 1.3; }
 
   .notice-banner {
     width: 100%;
@@ -317,12 +339,17 @@
           </div>
 
           <div class="status-card" id="status-card">
-            <div class="status-header">
+            <div class="status-top-line">
               <span class="status-label" id="status-label">현재</span>
-              <span class="status-title" id="status-title">-</span>
+              <span>&nbsp;</span>
             </div>
-            <div class="status-time" id="status-time">-</div>
-            <div class="status-sub" id="status-sub">&nbsp;</div>
+            <div class="status-card-inner">
+              <div class="status-header">
+                <span class="status-title" id="status-title">-</span>
+              </div>
+              <div class="status-time" id="status-time">-</div>
+              <div class="status-sub" id="status-sub">&nbsp;</div>
+            </div>
           </div>
 
           <div class="notice-banner">
@@ -345,13 +372,13 @@
         "end": 525,
         "type": "prep",
         "label": "교실 등교 및 조회",
-        "sub": "담임 선생님 조회"
+        "sub": "출석확인, 전자기기 제출"
       },
       {
         "start": 525,
         "end": 535,
         "type": "move",
-        "label": "이동반 시험실로 이동",
+        "label": "이동반 2,4열로 이동(10명)",
         "sub": "지정된 시험실로 이동"
       },
       {
@@ -366,7 +393,7 @@
         "end": 585,
         "type": "exam",
         "label": "1교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       },
       {
         "start": 585,
@@ -387,7 +414,7 @@
         "end": 645,
         "type": "exam",
         "label": "2교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       }
     ]
   },
@@ -400,13 +427,13 @@
         "end": 525,
         "type": "prep",
         "label": "교실 등교 및 조회",
-        "sub": "담임 선생님 조회"
+        "sub": "출석확인, 전자기기 제출"
       },
       {
         "start": 525,
         "end": 535,
         "type": "move",
-        "label": "이동반 시험실로 이동",
+        "label": "이동반 2,4열로 이동(10명)",
         "sub": "지정된 시험실로 이동"
       },
       {
@@ -421,14 +448,14 @@
         "end": 585,
         "type": "exam",
         "label": "1교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       },
       {
         "start": 585,
         "end": 595,
         "type": "move",
-        "label": "2열,4열 본반으로 이동",
-        "sub": "학년별 영어 듣기평가"
+        "label": "2,4열 본반으로 이동(화장실 이용)",
+        "sub": "영어 듣기 평가"
       },
       {
         "start": 595,
@@ -442,7 +469,7 @@
         "end": 645,
         "type": "exam",
         "label": "2교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       }
     ]
   },
@@ -455,13 +482,13 @@
         "end": 525,
         "type": "prep",
         "label": "교실 등교 및 조회",
-        "sub": "담임 선생님 조회"
+        "sub": "출석확인, 전자기기 제출"
       },
       {
         "start": 525,
         "end": 535,
         "type": "move",
-        "label": "이동반 시험실로 이동",
+        "label": "이동반 2,4열로 이동(10명)",
         "sub": "지정된 시험실로 이동"
       },
       {
@@ -476,7 +503,7 @@
         "end": 585,
         "type": "exam",
         "label": "1교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       },
       {
         "start": 585,
@@ -497,7 +524,7 @@
         "end": 645,
         "type": "exam",
         "label": "2교시 시험",
-        "sub": ""
+        "sub": "인적사항과 과목코드, 정답을 답안지에 정확하게 표시하세요."
       }
     ]
   }
@@ -531,28 +558,93 @@
     const currentMins = now.getHours() * 60 + now.getMinutes();
     const currentIdx = schedule.findIndex(item => currentMins >= item.start && currentMins < item.end);
 
+    const today = new Date();
+    const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const todayIdx = examDays.findIndex(d => d.date === todayFormatted);
+    const hasTimeOverride = urlParams.get('time') || urlParams.get('mode') === 'test';
+    const isBeforeExam = !hasTimeOverride && todayIdx < 0 && todayFormatted < examDays[0].date;
+    const isAfterExam = !hasTimeOverride && todayIdx < 0 && todayFormatted > examDays[examDays.length - 1].date;
+
     Array.from(els.timeline.children).forEach((el, i) => {
-      el.className = `tl-item ${schedule[i].type} ${i === currentIdx ? 'current' : currentMins >= schedule[i].end ? 'past' : ''}`;
+      if (isBeforeExam) {
+        el.className = `tl-item ${schedule[i].type}`;
+      } else if (isAfterExam) {
+        el.className = `tl-item ${schedule[i].type} past`;
+      } else {
+        el.className = `tl-item ${schedule[i].type} ${i === currentIdx ? 'current' : currentMins >= schedule[i].end ? 'past' : ''}`;
+      }
     });
 
     els.card.className = 'status-card';
+    els.time.style.display = '';
     
+    if (isBeforeExam) {
+      els.label.textContent = '안내';
+      els.title.textContent = '시험 일정 안내';
+      if (examDays.length === 1) {
+        const [y, m, d] = examDays[0].date.split('-');
+        els.time.textContent = `${y}년 ${Number(m)}월 ${Number(d)}일 (${examDays[0].dayLabel})`;
+        els.sub.textContent = '차분한 마음으로 시험을 준비하세요';
+      } else {
+        const firstD = examDays[0].date.split('-');
+        const lastD = examDays[examDays.length - 1].date.split('-');
+        els.time.textContent = `${Number(firstD[1])}월 ${Number(firstD[2])}일 ~ ${Number(lastD[1])}월 ${Number(lastD[2])}일 (${examDays.length}일간)`;
+        els.sub.textContent = `첫 시험일: ${examDays[0].dayLabel} (${Number(firstD[1])}월 ${Number(firstD[2])}일)`;
+      }
+      return;
+    }
+
+    if (isAfterExam) {
+      els.card.classList.add('ended');
+      els.label.textContent = '안내';
+      els.title.textContent = '시험 종료';
+      els.time.textContent = '시험이 모두 끝났습니다';
+      els.sub.textContent = '모두 수고하셨습니다';
+      return;
+    }
+
+    if (!hasTimeOverride && todayIdx < 0 && todayFormatted > examDays[0].date && todayFormatted < examDays[examDays.length - 1].date) {
+      const nextDay = examDays.find(d => d.date > todayFormatted);
+      els.label.textContent = '안내';
+      els.title.textContent = '다음 시험 안내';
+      if (nextDay) {
+        const nD = nextDay.date.split('-');
+        els.time.textContent = `${nextDay.dayLabel} (${Number(nD[1])}월 ${Number(nD[2])}일)`;
+        els.sub.textContent = '다음 시험을 준비하세요';
+      } else {
+        els.time.textContent = '\u00A0'; els.sub.textContent = '\u00A0';
+      }
+      return;
+    }
+
     if (currentIdx >= 0) {
       const item = schedule[currentIdx];
       els.card.classList.add(item.type);
       els.label.textContent = '지금은'; els.title.textContent = item.label;
-      els.time.textContent = `${formatTime(item.start)} ~ ${formatTime(item.end)}`;
+      els.time.textContent = ''; els.time.style.display = 'none';
       els.sub.textContent = item.sub || '\u00A0';
     } else if (currentMins < schedule[0].start) {
       els.label.textContent = '안내'; els.title.textContent = '08시 40분까지 등교';
-      els.time.textContent = '\u00A0'; els.sub.textContent = '\u00A0';
+      els.time.textContent = '\u00A0'; els.time.style.display = 'none'; els.sub.textContent = '\u00A0';
     } else if (currentMins >= schedule[schedule.length - 1].end) {
       els.card.classList.add('ended');
-      els.label.textContent = '안내'; els.title.textContent = '시험 종료';
-      els.time.textContent = '오늘 시험이 모두 끝났습니다'; els.sub.textContent = '\u00A0';
+      if (todayIdx === examDays.length - 1 || examDays.length === 1) {
+        els.label.textContent = '안내'; els.title.textContent = '시험 종료';
+        els.time.textContent = '시험이 모두 끝났습니다'; els.sub.textContent = '모두 수고하셨습니다';
+      } else {
+        els.label.textContent = '안내'; els.title.textContent = '오늘 시험 종료';
+        els.time.textContent = '오늘 시험이 모두 끝났습니다';
+        const nextDay = examDays[todayIdx + 1];
+        if (nextDay) {
+          const nD = nextDay.date.split('-');
+          els.sub.textContent = `다음 시험: ${nextDay.dayLabel} (${Number(nD[1])}월 ${Number(nD[2])}일)`;
+        } else {
+          els.sub.textContent = '\u00A0';
+        }
+      }
     } else {
       els.label.textContent = '대기'; els.title.textContent = '다음 활동 대기 중';
-      els.time.textContent = '\u00A0'; els.sub.textContent = '\u00A0';
+      els.time.textContent = '\u00A0'; els.time.style.display = 'none'; els.sub.textContent = '\u00A0';
     }
   }
 
