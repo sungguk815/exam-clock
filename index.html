@@ -43,11 +43,11 @@
   .accent-bar.left { left: 0; } .accent-bar.right { right: 0; }
 
   .main { height: 100%; display: flex; flex-direction: column; padding: clamp(20px, 3vh, 60px) clamp(40px, 4vw, 120px); }
-  .dashboard { flex: 1; display: grid; grid-template-columns: minmax(460px, 45%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
+  .dashboard { flex: 1; display: grid; grid-template-columns: minmax(340px, 33.33%) 1fr; gap: clamp(18px, 1.8vw, 48px); max-width: 3400px; width: 100%; margin: 0 auto; min-height: 0; }
 
-  .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(16px, 1.5vw, 32px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
+  .left-panel { background: var(--panel-bg); border: 1px solid var(--panel-line); border-top: clamp(6px, 0.5vw, 12px) solid var(--rest); border-radius: 6px; padding: clamp(18px, 1.8vh, 36px) clamp(16px, 1.4vw, 28px); display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.08); min-height: 0; }
   .timeline-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .timeline { display: flex; flex-direction: column; gap: clamp(16px, 2vh, 28px); flex: 1; overflow-y: auto; padding: 0 clamp(8px, 1vw, 16px) 0 clamp(8px, 1vw, 16px); }
+  .timeline { display: flex; flex-direction: column; gap: clamp(14px, 1.8vh, 24px); flex: 1; overflow-y: auto; padding: 0 clamp(6px, 0.8vw, 14px) 0 clamp(6px, 0.8vw, 14px); }
   
   .timeline::-webkit-scrollbar { width: clamp(8px, 0.6vw, 14px); }
   .timeline::-webkit-scrollbar-track { background: var(--panel-bg); border-radius: 4px; }
@@ -57,10 +57,10 @@
     background: var(--bg-card); 
     border: clamp(2px, 0.15vw, 3px) solid var(--theme-color, var(--panel-line)); 
     border-radius: 6px; 
-    padding: clamp(16px, 2vh, 26px) clamp(18px, 2vw, 32px); 
+    padding: clamp(14px, 1.8vh, 24px) clamp(16px, 1.6vw, 28px); 
     position: relative; transition: all 0.5s ease; 
-    min-height: clamp(74px, 7vh, 100px); 
-    display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(4px, 0.6vw, 10px); 
+    min-height: clamp(70px, 6.5vh, 96px); 
+    display: flex; flex-direction: column; justify-content: center; margin: 0 clamp(4px, 0.5vw, 10px); 
   }
   .tl-item::before { 
     content: ''; position: absolute; left: clamp(-12px, -1vw, -20px); top: 50%; transform: translateY(-50%); 
@@ -88,13 +88,13 @@
   }
   .tl-item.past { opacity: 0.5; }
 
-  .right-panel { background: var(--bg-card); border: 1px solid var(--line); border-top: clamp(6px, 0.5vw, 12px) solid var(--accent); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; min-height: 0; }
-  .right-header { display: flex; align-items: center; gap: clamp(14px, 1.5vw, 36px); width: 100%; padding-bottom: clamp(12px, 1.4vh, 28px); margin-bottom: clamp(16px, 1.8vh, 36px); border-bottom: 2px solid var(--line); }
-  .right-header img { width: clamp(54px, min(3.5vw, 6vh), 120px); }
-  .right-header .school-name, .right-header .exam-title { font-weight: 700; font-size: clamp(1.6rem, 1.8vw, 3rem); white-space: nowrap; }
+  .right-panel { background: var(--bg-card); border: 1px solid var(--line); border-top: clamp(6px, 0.5vw, 12px) solid var(--accent); border-radius: 6px; padding: clamp(18px, 1.8vh, 40px) clamp(20px, 2.2vw, 60px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; min-height: 0; overflow: hidden; }
+  .right-header { display: flex; align-items: center; flex-wrap: wrap; gap: clamp(12px, 1.2vw, 28px); width: 100%; padding-bottom: clamp(10px, 1.2vh, 24px); margin-bottom: clamp(14px, 1.5vh, 30px); border-bottom: 2px solid var(--line); }
+  .right-header img { width: clamp(48px, min(3vw, 5vh), 100px); flex-shrink: 0; }
+  .right-header .school-name, .right-header .exam-title { font-weight: 700; font-size: clamp(1.3rem, 1.5vw, 2.5rem); word-break: keep-all; }
   .right-header .school-name { color: var(--navy); }
   .right-header .exam-title { color: var(--accent); }
-  .divider-v { width: clamp(2px, 0.15vw, 4px); height: clamp(36px, 3.5vh, 72px); background: var(--line); }
+  .divider-v { width: clamp(2px, 0.15vw, 4px); height: clamp(30px, 3vh, 56px); background: var(--line); flex-shrink: 0; }
 
   /* Day select styled dropdown */
   .day-select {
@@ -114,18 +114,19 @@
     border-color: var(--navy);
   }
 
-  .main-display { display: flex; flex-direction: column; align-items: center; gap: clamp(16px, 1.8vh, 32px); width: 100%; flex: 1; justify-content: flex-start; padding-top: clamp(8px, 1.5vh, 30px); }
+  .main-display { display: flex; flex-direction: column; align-items: center; gap: clamp(14px, 1.5vh, 28px); width: 100%; flex: 1; justify-content: flex-start; padding-top: clamp(6px, 1vh, 24px); overflow: hidden; }
   .clock-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: clamp(720px, 60vw, 1600px);
-    margin-bottom: clamp(16px, 2.5vh, 40px);
+    max-width: 1400px;
+    margin-bottom: clamp(12px, 2vh, 32px);
+    position: relative;
   }
   .clock-badge {
     position: absolute;
-    left: clamp(20px, 2vw, 40px);
+    left: clamp(16px, 1.5vw, 32px);
     top: 50%;
     transform: translateY(-50%);
     display: inline-flex;
@@ -133,7 +134,7 @@
     justify-content: center;
     background: var(--navy);
     color: #ffffff;
-    font-size: clamp(0.9rem, 1vw, 1.4rem);
+    font-size: clamp(0.85rem, 0.9vw, 1.3rem);
     font-weight: 700;
     padding: 0.2em 0.8em;
     border-radius: 4px;
@@ -148,19 +149,24 @@
     justify-content: center;
     width: 100%;
     font-weight: 600;
-    font-size: clamp(1.2rem, 1.3vw, 2.2rem);
+    font-size: clamp(1.1rem, 1.2vw, 2rem);
     color: var(--ink-soft);
-    margin: clamp(6px, 0.7vh, 14px) 0 clamp(4px, 0.4vh, 10px);
+    margin: clamp(4px, 0.6vh, 12px) 0 clamp(4px, 0.4vh, 10px);
+    padding: 0 clamp(80px, 8vw, 140px);
+    word-break: keep-all;
+    text-align: center;
   }
-  .clock { font-weight: 700; font-size: clamp(8rem, min(16vw, 24vh), 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
+  .clock { font-weight: 700; font-size: clamp(8rem, min(16vw, 24vh), 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; text-align: center; }
   .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
   .status-card { 
-    width: 100%; max-width: clamp(720px, 60vw, 1600px); 
+    width: 100%; max-width: 1400px; 
     background: var(--theme-soft, var(--bg)); 
     border: 2px solid var(--theme-color, var(--line)); 
-    border-radius: 6px; padding: clamp(18px, 2vh, 40px) 0; 
+    border-radius: 6px; padding: clamp(16px, 1.8vh, 36px) 0; 
     display: flex; flex-direction: column; align-items: center; gap: clamp(6px, 0.7vh, 14px); transition: all 0.5s ease; 
+    position: relative;
+    overflow: hidden;
   }
   .status-card.ended { opacity: 0.6; }
   .status-header {
@@ -169,11 +175,11 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 0;
+    padding: 0 clamp(80px, 8vw, 140px);
   }
   .status-label {
     position: absolute;
-    left: clamp(20px, 2vw, 40px);
+    left: clamp(16px, 1.5vw, 32px);
     top: 50%;
     transform: translateY(-50%);
     display: inline-flex;
@@ -181,7 +187,7 @@
     justify-content: center;
     background: var(--theme-color, var(--navy));
     color: #ffffff;
-    font-size: clamp(1rem, 1.1vw, 1.8rem);
+    font-size: clamp(0.9rem, 1vw, 1.6rem);
     font-weight: 700;
     padding: 0.2em 0.8em;
     border-radius: 6px;
@@ -190,17 +196,17 @@
     transition: all 0.5s ease;
     line-height: 1;
   }
-  .status-title { font-weight: 700; font-size: clamp(3rem, min(3.8vw, 6.5vh), 7rem); color: var(--theme-color, var(--navy)); text-align: center; }
+  .status-title { font-weight: 700; font-size: clamp(2.8rem, min(3.8vw, 6.5vh), 7rem); color: var(--theme-color, var(--navy)); text-align: center; word-break: keep-all; line-height: 1.2; }
   .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; text-align: center; }
-  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); text-align: center; }
+  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); text-align: center; word-break: keep-all; }
 
   .notice-banner {
     width: 100%;
-    max-width: clamp(720px, 60vw, 1600px);
+    max-width: 1400px;
     background: var(--accent-soft);
     border: 2px solid var(--accent);
     border-radius: 6px;
-    padding: clamp(12px, 1.5vh, 22px) clamp(20px, 2.5vw, 40px);
+    padding: clamp(10px, 1.3vh, 20px) clamp(16px, 2vw, 36px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,15 +214,17 @@
     box-shadow: 0 4px 12px rgba(168, 50, 50, 0.08);
   }
   .notice-icon {
-    font-size: clamp(1.4rem, 1.6vw, 2.4rem);
+    font-size: clamp(1.3rem, 1.5vw, 2.2rem);
+    flex-shrink: 0;
     animation: notice-pulse 2s infinite alternate ease-in-out;
   }
   .notice-text {
-    font-size: clamp(1.1rem, 1.3vw, 2rem);
+    font-size: clamp(1.05rem, 1.2vw, 1.8rem);
     font-weight: 700;
     color: var(--ink-soft);
     letter-spacing: -0.02em;
     text-align: center;
+    word-break: keep-all;
   }
   .notice-text strong {
     color: var(--accent);
@@ -420,7 +428,7 @@
         "end": 595,
         "type": "move",
         "label": "2열,4열 본반으로 이동",
-        "sub": "학년별 영어듣기평가(본반)"
+        "sub": "학년별 영어 듣기평가"
       },
       {
         "start": 595,
