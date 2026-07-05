@@ -90,7 +90,7 @@
 
   .right-panel { background: var(--bg-card); border: 1px solid var(--line); border-top: clamp(6px, 0.5vw, 12px) solid var(--accent); border-radius: 6px; padding: clamp(22px, 2vh, 48px) clamp(28px, 3vw, 80px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); display: flex; flex-direction: column; align-items: center; min-height: 0; }
   .right-header { display: flex; align-items: center; gap: clamp(14px, 1.5vw, 36px); width: 100%; padding-bottom: clamp(12px, 1.4vh, 28px); margin-bottom: clamp(16px, 1.8vh, 36px); border-bottom: 2px solid var(--line); }
-  .right-header img { width: clamp(54px, 3.5vw, 120px); }
+  .right-header img { width: clamp(54px, min(3.5vw, 6vh), 120px); }
   .right-header .school-name, .right-header .exam-title { font-weight: 700; font-size: clamp(1.6rem, 1.8vw, 3rem); white-space: nowrap; }
   .right-header .school-name { color: var(--navy); }
   .right-header .exam-title { color: var(--accent); }
@@ -100,7 +100,7 @@
   .clock-box { display: flex; flex-direction: column; align-items: center; }
   .clock-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.4em; color: var(--ink-muted); padding: clamp(4px, 0.5vh, 10px) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); width: 100%; text-align: center; }
   .date-line { font-weight: 500; font-size: clamp(1.2rem, 1.3vw, 2.2rem); color: var(--ink-soft); margin: clamp(6px, 0.7vh, 14px) 0 clamp(4px, 0.4vh, 10px); }
-  .clock { font-weight: 700; font-size: clamp(8rem, 16vw, 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
+  .clock { font-weight: 700; font-size: clamp(8rem, min(16vw, 24vh), 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
   .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
   .status-card { 
@@ -113,9 +113,68 @@
   }
   .status-card.ended { opacity: 0.6; border-left-color: var(--ink-muted); }
   .status-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.3em; color: var(--ink-muted); }
-  .status-title { font-weight: 700; font-size: clamp(3rem, 3.8vw, 7rem); color: var(--theme-color, var(--navy)); text-align: center; }
+  .status-title { font-weight: 700; font-size: clamp(3rem, min(3.8vw, 6.5vh), 7rem); color: var(--theme-color, var(--navy)); text-align: center; }
   .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; }
   .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); }
+
+  .notice-banner {
+    width: 100%;
+    max-width: clamp(720px, 60vw, 1600px);
+    background: var(--accent-soft);
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: clamp(12px, 1.5vh, 22px) clamp(20px, 2.5vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 1vw, 16px);
+    box-shadow: 0 4px 12px rgba(168, 50, 50, 0.08);
+  }
+  .notice-icon {
+    font-size: clamp(1.4rem, 1.6vw, 2.4rem);
+    animation: notice-pulse 2s infinite alternate ease-in-out;
+  }
+  .notice-text {
+    font-size: clamp(1.1rem, 1.3vw, 2rem);
+    font-weight: 700;
+    color: var(--ink-soft);
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+  .notice-text strong {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  @keyframes notice-pulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15); }
+  }
+
+  .fullscreen-btn {
+    margin-left: auto;
+    background: none;
+    border: 2px solid var(--line);
+    color: var(--navy);
+    border-radius: 6px;
+    width: clamp(36px, 3.2vw, 52px);
+    height: clamp(36px, 3.2vw, 52px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  .fullscreen-btn:hover {
+    background: var(--prep-soft);
+    border-color: var(--prep);
+    color: var(--prep);
+  }
+  .fullscreen-btn svg {
+    width: clamp(20px, 1.8vw, 28px);
+    height: clamp(20px, 1.8vw, 28px);
+  }
 
   @media (max-width: 900px) {
     .corner { width: 28px; height: 28px; }
@@ -149,6 +208,14 @@
           <div class="school-name">동국대학교사범대학부속중학교</div>
           <div class="divider-v"></div>
           <div class="exam-title">정기시험</div>
+          <button id="fullscreen-btn" class="fullscreen-btn" title="전체화면 토글">
+            <svg class="icon-expand" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+            </svg>
+            <svg class="icon-shrink" viewBox="0 0 24 24" style="display: none;">
+              <path fill="currentColor" d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+            </svg>
+          </button>
         </div>
 
         <div class="main-display">
@@ -163,6 +230,11 @@
             <div class="status-title" id="status-title">-</div>
             <div class="status-time" id="status-time">-</div>
             <div class="status-sub" id="status-sub">&nbsp;</div>
+          </div>
+
+          <div class="notice-banner">
+            <span class="notice-icon">📢</span>
+            <span class="notice-text">시험 시작과 종료는 <strong>'방송(타종)'</strong>을 기준으로 합니다.</span>
           </div>
         </div>
       </div>
@@ -247,6 +319,38 @@
   setTimeout(() => { updateAll(); setInterval(updateAll, 60000); }, msUntilNextMinute);
 
   if ('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(() => {});
+
+  // Fullscreen support
+  const fsBtn = document.getElementById('fullscreen-btn');
+  if (fsBtn) {
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen().catch(err => {
+          console.error(`Error attempting to exit fullscreen: ${err.message}`);
+        });
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFs = !!document.fullscreenElement;
+      document.body.classList.toggle('fullscreen-active', isFs);
+      const expandIcon = fsBtn.querySelector('.icon-expand');
+      const shrinkIcon = fsBtn.querySelector('.icon-shrink');
+      if (isFs) {
+        expandIcon.style.display = 'none';
+        shrinkIcon.style.display = 'block';
+        fsBtn.title = '전체화면 해제';
+      } else {
+        expandIcon.style.display = 'block';
+        shrinkIcon.style.display = 'none';
+        fsBtn.title = '전체화면 토글';
+      }
+    });
+  }
 </script>
 </body>
 </html>
