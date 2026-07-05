@@ -454,8 +454,8 @@
         "start": 585,
         "end": 595,
         "type": "move",
-        "label": "2,4열 본반으로 이동(화장실 이용)",
-        "sub": "영어 듣기 평가"
+        "label": "2,4열, 본반으로 이동",
+        "sub": "영어 듣기 평가(본반)"
       },
       {
         "start": 595,
@@ -628,13 +628,13 @@
       els.time.textContent = '\u00A0'; els.time.style.display = 'none'; els.sub.textContent = '\u00A0';
     } else if (currentMins >= schedule[schedule.length - 1].end) {
       els.card.classList.add('ended');
-      if (todayIdx === examDays.length - 1 || examDays.length === 1) {
+      if (currentDayIndex === examDays.length - 1 || examDays.length === 1) {
         els.label.textContent = '안내'; els.title.textContent = '시험 종료';
         els.time.textContent = '시험이 모두 끝났습니다'; els.sub.textContent = '모두 수고하셨습니다';
       } else {
         els.label.textContent = '안내'; els.title.textContent = '오늘 시험 종료';
         els.time.textContent = '오늘 시험이 모두 끝났습니다';
-        const nextDay = examDays[todayIdx + 1];
+        const nextDay = examDays[currentDayIndex + 1];
         if (nextDay) {
           const nD = nextDay.date.split('-');
           els.sub.textContent = `다음 시험: ${nextDay.dayLabel} (${Number(nD[1])}월 ${Number(nD[2])}일)`;
