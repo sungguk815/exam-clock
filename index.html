@@ -96,10 +96,37 @@
   .right-header .exam-title { color: var(--accent); }
   .divider-v { width: clamp(2px, 0.15vw, 4px); height: clamp(36px, 3.5vh, 72px); background: var(--line); }
 
-  .main-display { display: flex; flex-direction: column; align-items: center; gap: clamp(16px, 2vh, 40px); width: 100%; flex: 1; justify-content: center; }
-  .clock-box { display: flex; flex-direction: column; align-items: center; }
-  .clock-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.4em; color: var(--ink-muted); padding: clamp(4px, 0.5vh, 10px) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); width: 100%; text-align: center; }
-  .date-line { font-weight: 500; font-size: clamp(1.2rem, 1.3vw, 2.2rem); color: var(--ink-soft); margin: clamp(6px, 0.7vh, 14px) 0 clamp(4px, 0.4vh, 10px); }
+  .main-display { display: flex; flex-direction: column; align-items: center; gap: clamp(16px, 1.8vh, 32px); width: 100%; flex: 1; justify-content: flex-start; padding-top: clamp(8px, 1.5vh, 30px); }
+  .clock-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: clamp(16px, 2.5vh, 40px); /* 시간과 안내 카드 사이에 약 1줄 공간 확보 */
+  }
+  .clock-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy);
+    color: #ffffff;
+    font-size: clamp(0.9rem, 1vw, 1.4rem);
+    font-weight: 700;
+    padding: 0.2em 0.8em;
+    border-radius: 4px;
+    margin-right: clamp(8px, 0.8vw, 16px);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .date-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: clamp(1.2rem, 1.3vw, 2.2rem);
+    color: var(--ink-soft);
+    margin: clamp(6px, 0.7vh, 14px) 0 clamp(4px, 0.4vh, 10px);
+  }
   .clock { font-weight: 700; font-size: clamp(8rem, min(16vw, 24vh), 26rem); line-height: 0.9; font-variant-numeric: tabular-nums; }
   .clock .colon { color: var(--accent); margin: 0 0.03em; }
 
@@ -107,15 +134,37 @@
     width: 100%; max-width: clamp(720px, 60vw, 1600px); 
     background: var(--theme-soft, var(--bg)); 
     border: 2px solid var(--theme-color, var(--line)); 
-    border-left: clamp(6px, 0.5vw, 12px) solid var(--theme-color, var(--navy)); 
     border-radius: 6px; padding: clamp(18px, 2vh, 40px) 0; 
     display: flex; flex-direction: column; align-items: center; gap: clamp(6px, 0.7vh, 14px); transition: all 0.5s ease; 
   }
-  .status-card.ended { opacity: 0.6; border-left-color: var(--ink-muted); }
-  .status-label { font-weight: 600; font-size: clamp(1rem, 1.1vw, 1.8rem); letter-spacing: 0.3em; color: var(--ink-muted); }
+  .status-card.ended { opacity: 0.6; }
+  .status-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 1.2vw, 24px);
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 0 clamp(20px, 2vw, 40px);
+  }
+  .status-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--theme-color, var(--navy));
+    color: #ffffff;
+    font-size: clamp(1rem, 1.1vw, 1.8rem);
+    font-weight: 700;
+    padding: 0.2em 0.8em;
+    border-radius: 6px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    transition: all 0.5s ease;
+    line-height: 1;
+  }
   .status-title { font-weight: 700; font-size: clamp(3rem, min(3.8vw, 6.5vh), 7rem); color: var(--theme-color, var(--navy)); text-align: center; }
-  .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; }
-  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); }
+  .status-time { font-weight: 700; font-size: clamp(1.8vw, 2vw, 3rem); font-variant-numeric: tabular-nums; text-align: center; }
+  .status-sub { font-size: clamp(1.1rem, 1.2vw, 2rem); color: var(--ink-soft); text-align: center; }
 
   .notice-banner {
     width: 100%;
@@ -220,14 +269,18 @@
 
         <div class="main-display">
           <div class="clock-box">
-            <div class="clock-label">현재시각</div>
-            <div class="date-line" id="date">&nbsp;</div>
+            <div class="date-line">
+              <span class="clock-badge">현재시각</span>
+              <span id="date">&nbsp;</span>
+            </div>
             <div class="clock"><span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span></div>
           </div>
 
           <div class="status-card" id="status-card">
-            <div class="status-label" id="status-label">현재</div>
-            <div class="status-title" id="status-title">-</div>
+            <div class="status-header">
+              <span class="status-label" id="status-label">현재</span>
+              <span class="status-title" id="status-title">-</span>
+            </div>
             <div class="status-time" id="status-time">-</div>
             <div class="status-sub" id="status-sub">&nbsp;</div>
           </div>
